@@ -81,10 +81,10 @@ footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--i
   <section class="hero">
     <span class="kicker">Data engineering · Analytics · Machine learning</span>
     <h1>Pipelines, models and dashboards built on real data.</h1>
-    <p>Each project below runs end to end: ingestion, SQL modeling, quality checks, analysis, ML or NLP, and a live dashboard you can open right now. Two of them refresh themselves every week from government data sources.</p>
+    <p>Each project below runs end to end: ingestion, SQL modeling, quality checks, analysis, ML, NLP or LLMs, and a live dashboard you can open right now. Two of them refresh themselves every week from government data sources.</p>
     <div class="facts">
-      <div><b>5</b><span>live dashboards</span></div>
-      <div><b>250k+</b><span>real records processed</span></div>
+      <div><b>6</b><span>live dashboards</span></div>
+      <div><b>500k+</b><span>real records processed</span></div>
       <div><b>2</b><span>auto-refreshing weekly</span></div>
       <div><b>100%</b><span>CI-tested pipelines</span></div>
     </div>
@@ -93,6 +93,18 @@ footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--i
   <section class="projects" id="projects">
     <h2>Projects</h2>
     <div class="grid">
+      <article class="card">
+        <a class="thumb" href="https://madhubuddaraju.github.io/drug-label-rag/"><img src="assets/druglabel.jpg" alt="Search box for asking questions about FDA drug labels"></a>
+        <div class="body">
+          <span class="type">LLM · retrieval-augmented generation</span>
+          <h3>Ask the Drug Label (RAG)</h3>
+          <p>Question answering over 600 FDA drug labels: hybrid keyword + semantic search, drug-name resolution, an open-source LLM that cites its sources or refuses, and a full evaluation suite.</p>
+          <div class="result">Right label section in the top 5 for <b>97%</b> of held-out questions; a faithfulness guardrail refuses <b>97%</b> of unanswerable questions.</div>
+          <div class="tags"><span>RAG</span><span>Embeddings</span><span>BM25</span><span>Qwen2.5</span><span>LLM evaluation</span><span>transformers.js</span></div>
+          <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/drug-label-rag/">Live demo →</a><a class="btn" href="https://github.com/madhubuddaraju/drug-label-rag">Code</a></div>
+        </div>
+      </article>
+
       <article class="card">
         <a class="thumb" href="https://madhubuddaraju.github.io/respiratory-surveillance/"><img src="assets/surveillance.jpg" alt="Map of US states colored by influenza activity"></a>
         <div class="body">
@@ -162,7 +174,7 @@ footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--i
     <div class="skillgrid">
       <div><b>Data engineering</b><span>ELT pipelines, PySpark, star schemas, DuckDB, MySQL, data quality checks, idempotent loads</span></div>
       <div><b>Analytics</b><span>SQL window functions, cohort and RFM analysis, seasonal analysis, outbreak detection</span></div>
-      <div><b>Machine learning and NLP</b><span>Text classification, topic modeling, transformers, LightGBM, PyTorch, Spark MLlib, quantile forecasting, calibration, SHAP, fairness evaluation</span></div>
+      <div><b>Machine learning, NLP and LLMs</b><span>Retrieval-augmented generation, embeddings, LLM evaluation, text classification, topic modeling, transformers, LightGBM, PyTorch, Spark MLlib, quantile forecasting, calibration, SHAP, fairness evaluation</span></div>
       <div><b>MLOps and delivery</b><span>MLflow, FastAPI, Docker, GitHub Actions CI, scheduled refreshes, static dashboards</span></div>
     </div>
   </section>

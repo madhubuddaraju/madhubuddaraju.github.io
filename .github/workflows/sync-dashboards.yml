@@ -19,12 +19,15 @@ jobs:
       - name: Fetch latest dashboards
         run: |
           set -euo pipefail
-          for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline consumer-complaints-nlp; do
+          for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline consumer-complaints-nlp drug-label-rag; do
             mkdir -p "$repo"
             curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/$repo/main/docs/index.html" -o "$repo/index.html.new"
             # only accept a real page (guards against an empty or error response)
             if grep -q "</html>" "$repo/index.html.new"; then mv "$repo/index.html.new" "$repo/index.html"; else rm "$repo/index.html.new"; fi
           done
+          # the drug label search also needs its browser index
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/drug-label-rag/main/docs/corpus.json" -o corpus.json.new
+          if python3 -c "import json; json.load(open('corpus.json.new'))"; then mv corpus.json.new drug-label-rag/corpus.json; else rm corpus.json.new; fi
       - name: Commit if anything changed
         run: |
           if git diff --quiet; then echo "Dashboards already up to date."; exit 0; fi
