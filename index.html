@@ -81,10 +81,10 @@ footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--i
   <section class="hero">
     <span class="kicker">Data engineering · Analytics · Machine learning</span>
     <h1>Pipelines, models and dashboards built on real data.</h1>
-    <p>Each project below runs end to end: ingestion, SQL modeling, quality checks, analysis or ML, and a live dashboard you can open right now. Two of them refresh themselves every week from government data sources.</p>
+    <p>Each project below runs end to end: ingestion, SQL modeling, quality checks, analysis, ML or NLP, and a live dashboard you can open right now. Two of them refresh themselves every week from government data sources.</p>
     <div class="facts">
-      <div><b>4</b><span>live dashboards</span></div>
-      <div><b>185k+</b><span>real records processed</span></div>
+      <div><b>5</b><span>live dashboards</span></div>
+      <div><b>250k+</b><span>real records processed</span></div>
       <div><b>2</b><span>auto-refreshing weekly</span></div>
       <div><b>100%</b><span>CI-tested pipelines</span></div>
     </div>
@@ -103,6 +103,18 @@ footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--i
           <div class="tags"><span>Python</span><span>DuckDB</span><span>SQL</span><span>LightGBM</span><span>GitHub Actions</span></div>
           <span class="live">Updates every Friday</span>
           <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/respiratory-surveillance/">Live dashboard →</a><a class="btn" href="https://github.com/madhubuddaraju/respiratory-surveillance">Code</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="thumb" href="https://madhubuddaraju.github.io/consumer-complaints-nlp/"><img src="assets/complaints.jpg" alt="Complaint routing panel predicting the product a complaint is about"></a>
+        <div class="body">
+          <span class="type">NLP · text classification</span>
+          <h3>Consumer Complaint Intelligence</h3>
+          <p>53k real CFPB complaint narratives: product routing with a model that runs in your browser, form-letter detection, emerging-issue topic modeling and urgent-harm triage.</p>
+          <div class="result"><b>42%</b> of complaints auto-routed at <b>93%</b> accuracy; <b>37%</b> of narratives found to be near-copies of form letters.</div>
+          <div class="tags"><span>scikit-learn</span><span>NLP</span><span>DistilBERT</span><span>NMF topics</span><span>JavaScript</span><span>GitHub Actions</span></div>
+          <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/consumer-complaints-nlp/">Live dashboard →</a><a class="btn" href="https://github.com/madhubuddaraju/consumer-complaints-nlp">Code</a></div>
         </div>
       </article>
 
@@ -150,7 +162,7 @@ footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--i
     <div class="skillgrid">
       <div><b>Data engineering</b><span>ELT pipelines, PySpark, star schemas, DuckDB, MySQL, data quality checks, idempotent loads</span></div>
       <div><b>Analytics</b><span>SQL window functions, cohort and RFM analysis, seasonal analysis, outbreak detection</span></div>
-      <div><b>Machine learning</b><span>LightGBM, PyTorch, Spark MLlib, quantile forecasting, calibration, SHAP, fairness evaluation</span></div>
+      <div><b>Machine learning and NLP</b><span>Text classification, topic modeling, transformers, LightGBM, PyTorch, Spark MLlib, quantile forecasting, calibration, SHAP, fairness evaluation</span></div>
       <div><b>MLOps and delivery</b><span>MLflow, FastAPI, Docker, GitHub Actions CI, scheduled refreshes, static dashboards</span></div>
     </div>
   </section>

@@ -19,7 +19,7 @@ jobs:
       - name: Fetch latest dashboards
         run: |
           set -euo pipefail
-          for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline; do
+          for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline consumer-complaints-nlp; do
             mkdir -p "$repo"
             curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/$repo/main/docs/index.html" -o "$repo/index.html.new"
             # only accept a real page (guards against an empty or error response)
