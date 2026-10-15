@@ -283,3 +283,88 @@ export function matchInspection(place, records) {
   }
   return best;
 }
+
+// ---------- prebuilt gas station tiles (US) ----------
+
+/** Keys of the 1-degree tiles that a circle of radius m around a point touches. */
+export function fuelTileKeys(lat, lon, m) {
+  const dLat = m / 111320, dLon = m / (111320 * Math.cos(lat * Math.PI / 180));
+  const keys = [];
+  for (let a = Math.floor(lat - dLat); a <= Math.floor(lat + dLat); a++)
+    for (let o = Math.floor(lon - dLon); o <= Math.floor(lon + dLon); o++) keys.push(`${a}_${o}`);
+  return keys;
+}
+
+/** Tile rows [lat, lon, name, hours, diesel, address, id] -> places within m, nearest first. */
+export function placesFromTiles(rowLists, origin, m) {
+  const out = [];
+  for (const rows of rowLists) for (const [lat, lon, name, hours, diesel, address, id] of rows) {
+    const dist = distanceMeters(origin.lat, origin.lon, lat, lon);
+    if (dist > m) continue;
+    const tags = { amenity: "fuel", name };
+    if (hours) tags.opening_hours = hours;
+    if (diesel) tags["fuel:diesel"] = "yes";
+    out.push({ id, name, lat, lon, tags, dist, address });
+  }
+  return out.sort((a, b) => a.dist - b.dist);
+}
+
+// ---------- Google Places (optional, with the user's own key) ----------
+
+export const GOOGLE_NEARBY = "https://places.googleapis.com/v1/places:searchNearby";
+export const GOOGLE_TEXT = "https://places.googleapis.com/v1/places:searchText";
+
+const money = p => p ? Number(p.units || 0) + (p.nanos || 0) / 1e9 : null;
+
+/** Google fuelOptions -> {regular, midgrade, premium, diesel, updated}. */
+export function googleFuel(fuelOptions) {
+  const out = {};
+  for (const f of fuelOptions?.fuelPrices || []) {
+    const key = { REGULAR_UNLEADED: "regular", MIDGRADE: "midgrade", PREMIUM: "premium", DIESEL: "diesel" }[f.type];
+    if (!key || !f.price) continue;
+    out[key] = money(f.price);
+    if (f.updateTime && (!out.updated || f.updateTime > out.updated)) out.updated = f.updateTime;
+  }
+  return out;
+}
+
+/** Google currentOpeningHours -> the same status shape as hoursStatus(). */
+export function googleStatus(coh, now = new Date()) {
+  if (!coh || coh.openNow == null) return { state: "unknown", label: "Hours not listed" };
+  const close = coh.nextCloseTime ? new Date(coh.nextCloseTime) : null;
+  const open = coh.nextOpenTime ? new Date(coh.nextOpenTime) : null;
+  if (coh.openNow) {
+    if (!close) return { state: "open", label: "Open 24 hours", open24: true };
+    const mins = Math.round((close - now) / 60000);
+    if (mins <= 45) return { state: "open", soon: true, closesAt: close, label: `Closes in ${mins} min` };
+    return { state: "open", closesAt: close, label: `Open · closes ${formatTime(close)}${close - now < 12 * 3600000 ? "" : dayWord(close, now)}` };
+  }
+  if (!open) return { state: "closed", label: "Closed" };
+  const mins = Math.round((open - now) / 60000);
+  if (mins <= 45) return { state: "closed", soon: true, opensAt: open, label: `Opens in ${mins} min` };
+  return { state: "closed", opensAt: open, label: `Closed · opens ${formatTime(open)}${dayWord(open, now)}` };
+}
+
+/** A Google place (Places API New) -> a Pitstop place. */
+export function fromGoogle(g, origin) {
+  const lat = g.location?.latitude, lon = g.location?.longitude;
+  return {
+    id: "g/" + g.id, google: true, name: g.displayName?.text || "Gas station", lat, lon,
+    dist: distanceMeters(origin.lat, origin.lon, lat, lon),
+    address: (g.shortFormattedAddress || g.formattedAddress || "").replace(/, USA$/, ""),
+    tags: { amenity: "fuel", phone: g.nationalPhoneNumber, website: g.websiteUri },
+    googleStatus: g.currentOpeningHours, fuel: googleFuel(g.fuelOptions), mapsUri: g.googleMapsUri,
+    rating: g.rating, ratings: g.userRatingCount,
+  };
+}
+
+/** Pick the Google result that is the same restaurant: close by and with a similar name. */
+export function sameGooglePlace(place, results) {
+  const n = s => (s || "").toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+  const target = n(place.name);
+  return results.find(g => {
+    const d = distanceMeters(place.lat, place.lon, g.location?.latitude, g.location?.longitude);
+    const name = n(g.displayName?.text);
+    return d < 150 && name && (name.includes(target) || target.includes(name));
+  }) || null;
+}
