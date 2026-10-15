@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Readmission Risk Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: clinical model report on white - summary band, capacity planner, then evidence cards in a 2-column grid */
+:root {
+  color-scheme: light;
+  --bg: #ffffff; --line: #e4e7eb; --soft: #f5f7f8; --ink: #101820; --ink-2: #4a5560; --ink-3: #8b96a0;
+  --teal: #0f766e; --teal-2: #14b8a6; --teal-soft: #e6f4f2;
+  --m-lgbm: #2a78d6; --m-deep: #eb6834; --m-ens: #1baf7a; --m-lr: #8c8b86;
+  --warn: #b45309; --warn-bg: #fdf3e3; --bad: #b42318; --bad-bg: #fde8e6;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --f-data: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14.5px/1.55 var(--f-body); }
+.mono, .num, td.n { font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 0 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top { border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 12px; height: 56px; padding-block: 0; }
+.logo { width: 28px; height: 28px; border-radius: 7px; background: var(--teal); display: grid; place-items: center; }
+.top b { font-size: 15px; }
+.top .sp { flex: 1; }
+.top a { color: var(--ink-2); font-size: 13px; text-decoration: none; border: 1px solid var(--line); padding: 5px 10px; border-radius: 8px; }
+.top a:hover { border-color: var(--ink-3); color: var(--ink); }
+.hero { padding: 32px 0 22px; display: grid; gap: 10px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); font-weight: 600; }
+h1 { margin: 0; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; letter-spacing: -0.02em; max-width: 24ch; text-wrap: balance; }
+.lede { margin: 0; color: var(--ink-2); max-width: 74ch; font-size: 15.5px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag { font-size: 12px; padding: 3px 9px; border-radius: 999px; background: var(--soft); color: var(--ink-2); border: 1px solid var(--line); }
+
+.stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: 18px; }
+.stat { padding: 16px 18px; border-right: 1px solid var(--line); display: grid; gap: 2px; }
+.stat:last-child { border-right: 0; }
+.stat .l { font-size: 12.5px; color: var(--ink-2); }
+.stat .v { font-family: var(--f-data); font-size: 26px; font-weight: 500; letter-spacing: -0.03em; }
+.stat .s { font-size: 12px; color: var(--ink-3); }
+
+.planner { border: 1px solid var(--teal); background: linear-gradient(0deg, var(--teal-soft), #fff 70%); border-radius: 14px; padding: 18px 20px; display: grid; gap: 14px; margin-bottom: 18px; }
+.planner h2 { margin: 0; font-size: 16px; }
+.planner p { margin: 0; color: var(--ink-2); }
+.prow { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: center; }
+.slider { display: grid; gap: 6px; }
+.slider label { font-weight: 600; }
+input[type=range] { width: 100%; accent-color: var(--teal); }
+.ticks { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink-3); font-family: var(--f-data); }
+.pout { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pout div { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.pout .v { font-family: var(--f-data); font-size: 22px; font-weight: 500; }
+.pout .l { font-size: 12px; color: var(--ink-2); }
+.psent { font-size: 14px; color: var(--ink); }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.card { border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.card.wide { grid-column: 1 / -1; }
+.ch { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ch h2 { margin: 0; font-size: 15px; }
+.meta { font-size: 12px; color: var(--ink-3); }
+.note { font-size: 13px; color: var(--ink-2); margin: 0; }
+.chart { position: relative; height: 290px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.legend i.line { height: 3px; width: 18px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.seg button { font: inherit; font-size: 12.5px; padding: 5px 11px; border: 0; background: #fff; color: var(--ink-2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.scroll { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th { text-align: left; font-size: 11.5px; color: var(--ink-3); font-weight: 600; padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 8px; border-bottom: 1px solid #eff1f3; white-space: nowrap; }
+th.n, td.n { text-align: right; }
+tr:last-child td { border-bottom: 0; }
+tr.champ td { background: var(--teal-soft); font-weight: 600; }
+.badge { font-size: 11px; padding: 2px 7px; border-radius: 999px; background: var(--teal); color: #fff; margin-left: 6px; font-weight: 600; }
+.gap { font-family: var(--f-data); font-size: 12px; padding: 1px 6px; border-radius: 5px; }
+.gap.warn { background: var(--warn-bg); color: var(--warn); } .gap.bad { background: var(--bad-bg); color: var(--bad); }
+.bar { display: inline-block; height: 7px; border-radius: 4px; background: var(--teal-2); vertical-align: middle; margin-right: 8px; }
+.steps { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.steps div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--soft); }
+.steps b { display: block; font-size: 13px; margin-bottom: 2px; }
+.steps span { font-size: 12px; color: var(--ink-2); }
+footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); display: grid; gap: 4px; }
+footer a { color: var(--ink-2); }
+@media (max-width: 980px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .stat:nth-child(3) { border-right: 0; } .stat:nth-child(n+4) { border-top: 1px solid var(--line); }
+  .grid, .prow { grid-template-columns: 1fr; } .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stat { border-right: 0 !important; border-top: 1px solid var(--line); } .stat:first-child { border-top: 0; }
+  .pout { grid-template-columns: 1fr 1fr 1fr; } .pout .v { font-size: 18px; } .steps { grid-template-columns: 1fr 1fr; } .top .hide { display: none; } }
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <span class="logo" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+  <b>Readmission Risk Model</b><span class="sp"></span>
+  <a class="hide" href="https://github.com/madhubuddaraju/readmission-risk-ml/blob/main/reports/model_card.md">Model card</a>
+  <a href="https://github.com/madhubuddaraju/readmission-risk-ml">Code</a>
+</div></div>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Machine learning · 30-day hospital readmission</span>
+    <h1>Which diabetic patients will be back in hospital within 30 days?</h1>
+    <p class="lede" id="lede"></p>
+    <div class="tags"><span class="tag">PySpark</span><span class="tag">MySQL</span><span class="tag">LightGBM</span><span class="tag">PyTorch</span><span class="tag">MLflow</span><span class="tag">FastAPI</span><span class="tag">99,343 encounters · 130 US hospitals</span></div>
+  </section>
+
+  <section class="stats" id="stats" aria-label="Test-set results"></section>
+
+  <section class="planner" aria-labelledby="plTitle">
+    <div><h2 id="plTitle">Capacity planner</h2><p>A care team can only call so many patients after discharge. Move the slider to see what the model delivers at each level of capacity.</p></div>
+    <div class="prow">
+      <div class="slider">
+        <label for="cap">Patients the team can follow up: <span class="mono" id="capV"></span> of discharges</label>
+        <input id="cap" type="range" min="5" max="50" step="1" value="20">
+        <div class="ticks"><span>5%</span><span>20%</span><span>35%</span><span>50%</span></div>
+      </div>
+      <div class="pout" id="pout"></div>
+    </div>
+    <p class="psent" id="psent"></p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <div class="ch"><h2>Readmissions caught vs patients flagged</h2><span class="meta">Test patients</span></div>
+      <div class="legend"><span><i class="line" style="background:var(--teal)"></i>Model ranking</span><span><i class="line" style="background:#c3c9cf"></i>Random selection</span></div>
+      <div class="chart"><canvas id="gains" role="img" aria-label="Share of readmissions captured by share of patients flagged"></canvas></div>
+    </section>
+    <section class="card">
+      <div class="ch"><h2>Is the risk score honest?</h2><span class="meta">Predicted vs observed, by risk decile</span></div>
+      <div class="legend"><span><i style="background:var(--teal-2)"></i>Predicted risk</span><span><i style="background:#101820"></i>Observed readmission rate</span></div>
+      <div class="chart"><canvas id="cal" role="img" aria-label="Predicted and observed readmission rate per risk decile"></canvas></div>
+    </section>
+
+    <section class="card">
+      <div class="ch"><h2>Model comparison</h2>
+        <div class="seg" id="metricSeg"><button type="button" data-m="roc_auc" aria-pressed="true">ROC-AUC</button><button type="button" data-m="pr_auc" aria-pressed="false">PR-AUC</button></div></div>
+      <div class="scroll"><table id="models"></table></div>
+      <p class="note" id="modelNote"></p>
+    </section>
+    <section class="card">
+      <div class="ch"><h2>What drives the risk score</h2><span class="meta">Mean |SHAP|, LightGBM, test patients</span></div>
+      <div class="chart"><canvas id="shap" role="img" aria-label="Feature importance by mean absolute SHAP value"></canvas></div>
+    </section>
+
+    <section class="card wide">
+      <div class="ch"><h2>Fairness: does it work equally well for everyone?</h2>
+        <div class="seg" id="attrSeg"><button type="button" data-a="race" aria-pressed="true">Race</button><button type="button" data-a="gender" aria-pressed="false">Gender</button><button type="button" data-a="age_band" aria-pressed="false">Age</button></div></div>
+      <div class="scroll"><table id="fair"></table></div>
+      <p class="note">Recall = share of each group's readmissions the model flags at the 20% capacity threshold. Gaps beyond 5 points are highlighted for review before deployment.</p>
+    </section>
+
+    <section class="card wide">
+      <div class="ch"><h2>How it was built</h2><span class="meta">Every step runs in CI against a real MySQL 8 database</span></div>
+      <div class="steps">
+        <div><b>1 · Ingest</b><span>Checksum-verified CSV into MySQL raw tables</span></div>
+        <div><b>2 · Features</b><span>PySpark windows over patient history, ICD-9 groups</span></div>
+        <div><b>3 · Split</b><span>By patient hash, so nobody is in train and test</span></div>
+        <div><b>4 · Train</b><span>Spark LR, LightGBM, PyTorch embeddings net</span></div>
+        <div><b>5 · Evaluate</b><span>Calibration, bootstrap CIs, fairness, SHAP</span></div>
+        <div><b>6 · Serve</b><span>FastAPI + MySQL history lookup, MLflow registry</span></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div>Data: UCI "Diabetes 130-US hospitals, 1999-2008" (Strack et al., 2014), CC BY 4.0. Results are on held-out test patients; decisions were made on validation patients only.</div>
+    <div>Portfolio project, not a medical device. <a href="https://madhubuddaraju.github.io/">More projects</a></div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D = {"metrics":{"result":{"champion":"lightgbm","valid":{"spark_logreg":{"roc_auc":0.6558653686951916,"pr_auc":0.20810342538832216,"brier":0.22622784457358472,"log_loss":0.6513989995771615},"lightgbm":{"roc_auc":0.6829275146267607,"pr_auc":0.2460435154010882,"brier":0.09541688088342723,"log_loss":0.33158660129329204},"deep_mlp":{"roc_auc":0.6666289109456915,"pr_auc":0.23527978612399592,"brier":0.12168695777654648,"log_loss":0.4056238830089569},"ensemble":{"roc_auc":0.6810775214089856,"pr_auc":0.2487900551024645,"brier":0.2604197591979644,"log_loss":0.7278864256469998}},"test":{"spark_logreg":{"roc_auc":0.654953937454412,"pr_auc":0.20642355888541664,"brier":0.2259956494549422,"log_loss":0.6479592020878384},"lightgbm":{"roc_auc":0.6742902496457804,"pr_auc":0.23245735416263708,"brier":0.0970152013714017,"log_loss":0.33663941283880017},"deep_mlp":{"roc_auc":0.6578258954816935,"pr_auc":0.2111945260838957,"brier":0.12415284663438797,"log_loss":0.4116896092891693},"ensemble":{"roc_auc":0.6722363613503057,"pr_auc":0.22808805815539218,"brier":0.2629501414442136,"log_loss":0.7337378238217532}},"champion_test_calibrated":{"roc_auc":0.6734130944440492,"pr_auc":0.22076752350867374,"brier":0.09726788475336555,"log_loss":0.33773158946011494,"roc_auc_95ci":[0.659489434978877,0.6864299510698337],"pr_auc_95ci":[0.2050504938657967,0.23762970161357988]},"ece_raw":0.006027142665341513,"ece_calibrated":0.006359344192660254,"operating_point":{"threshold":0.15466101694915255,"flagged_share":0.19920053297801465,"precision":0.22842809364548494,"recall":0.3941142527409117,"lift":1.9784799109167508,"true_positives":683},"vs_baseline":{"baseline":"spark_logreg","delta":0.019506454251923707,"ci95":[0.012623636475939606,0.026753405553469143],"p_value_one_sided":0.0},"base_rate_test":0.11545636242504996},"fairness":[{"attribute":"race","group":"AfricanAmerican","n":2770,"readmit_rate":0.10288808664259928,"roc_auc":0.6514737548095592,"flag_rate":0.1891696750902527,"recall":0.3543859649122807,"recall_gap_vs_overall":-0.039728287828631026},{"attribute":"race","group":"Caucasian","n":11286,"readmit_rate":0.11979443558390927,"roc_auc":0.6748863505050493,"flag_rate":0.20751373382952332,"recall":0.40384615384615385,"recall_gap_vs_overall":0.009731901105242136},{"attribute":"race","group":"Hispanic","n":302,"readmit_rate":0.09933774834437085,"roc_auc":0.7566176470588235,"flag_rate":0.1490066225165563,"recall":0.4666666666666667,"recall_gap_vs_overall":0.07255241392575495},{"attribute":"race","group":"Missing","n":312,"readmit_rate":0.08974358974358974,"roc_auc":0.6657444668008048,"flag_rate":0.08012820512820513,"recall":0.17857142857142858,"recall_gap_vs_overall":-0.21554282416948314},{"attribute":"gender","group":"Female","n":7908,"readmit_rate":0.11469398077895802,"roc_auc":0.6691989347245558,"flag_rate":0.20548811330298433,"recall":0.402425578831312,"recall_gap_vs_overall":0.008311326090400306},{"attribute":"gender","group":"Male","n":7101,"readmit_rate":0.11632164483875511,"roc_auc":0.6801250204991174,"flag_rate":0.19208562174341642,"recall":0.38498789346246975,"recall_gap_vs_overall":-0.009126359278441964},{"attribute":"age_band","group":"[30-40)","n":514,"readmit_rate":0.0914396887159533,"roc_auc":0.7280058317007608,"flag_rate":0.21206225680933852,"recall":0.574468085106383,"recall_gap_vs_overall":0.1803538323654713},{"attribute":"age_band","group":"[40-50)","n":1517,"readmit_rate":0.1133816743572841,"roc_auc":0.703229013573096,"flag_rate":0.18127883981542517,"recall":0.42441860465116277,"recall_gap_vs_overall":0.03030435191025105},{"attribute":"age_band","group":"[50-60)","n":2606,"readmit_rate":0.10283960092095165,"roc_auc":0.6791443764922181,"flag_rate":0.15425940138142746,"recall":0.34328358208955223,"recall_gap_vs_overall":-0.05083067065135949},{"attribute":"age_band","group":"[60-70)","n":3310,"readmit_rate":0.1190332326283988,"roc_auc":0.6887102838879489,"flag_rate":0.1879154078549849,"recall":0.3756345177664975,"recall_gap_vs_overall":-0.01847973497441424},{"attribute":"age_band","group":"[70-80)","n":3710,"readmit_rate":0.11617250673854447,"roc_auc":0.666713367566508,"flag_rate":0.2326145552560647,"recall":0.4408352668213457,"recall_gap_vs_overall":0.046721014080434},{"attribute":"age_band","group":"[80-90)","n":2583,"readmit_rate":0.12737127371273713,"roc_auc":0.6401062076740304,"flag_rate":0.23073945025164538,"recall":0.3890577507598784,"recall_gap_vs_overall":-0.005056501981033301},{"attribute":"age_band","group":"[90-100)","n":390,"readmit_rate":0.13846153846153847,"roc_auc":0.5612874779541446,"flag_rate":0.18717948717948718,"recall":0.2777777777777778,"recall_gap_vs_overall":-0.11633647496313393}]},"shap":[{"feature":"discharge_disposition_id","mean_abs_shap":0.22202958798499586},{"feature":"number_inpatient","mean_abs_shap":0.16307549946557104},{"feature":"prior_encounters","mean_abs_shap":0.12321654652130971},{"feature":"payer_code","mean_abs_shap":0.08821663261136611},{"feature":"diag_1_group","mean_abs_shap":0.08683841450984238},{"feature":"medical_specialty","mean_abs_shap":0.07263445326608371},{"feature":"number_diagnoses","mean_abs_shap":0.06955726550823674},{"feature":"total_prior_visits","mean_abs_shap":0.06427646790244097},{"feature":"insulin","mean_abs_shap":0.0589766430069776},{"feature":"diag_2_group","mean_abs_shap":0.05809349011251417},{"feature":"age_years","mean_abs_shap":0.053459937035141195},{"feature":"n_meds_active","mean_abs_shap":0.05339592886849986},{"feature":"diag_3_group","mean_abs_shap":0.04805151720511402},{"feature":"num_medications","mean_abs_shap":0.04755209816707485},{"feature":"num_lab_procedures","mean_abs_shap":0.044593215146028514}],"curves":{"capacity":[{"share":1,"recall":0.03923831506058857,"precision":0.4533333333333333,"lift":3.926447393729563},{"share":2,"recall":0.07039815349105598,"precision":0.4066666666666667,"lift":3.5222542796691676},{"share":3,"recall":0.09867282169648009,"precision":0.38,"lift":3.2912867859203696},{"share":4,"recall":0.1286785920369302,"precision":0.37166666666666665,"lift":3.21910944412387},{"share":5,"recall":0.15060588574725908,"precision":0.348,"lift":3.0141257934218117},{"share":6,"recall":0.16907097518753605,"precision":0.32519422863485015,"lift":2.8165985988511837},{"share":7,"recall":0.189267166762839,"precision":0.3120837297811608,"lift":2.7030448840249415},{"share":8,"recall":0.20773225620311597,"precision":0.2997502081598668,"lift":2.5962207873511836},{"share":9,"recall":0.2256203115983843,"precision":0.28941524796447077,"lift":2.506706792814026},{"share":10,"recall":0.2423542989036353,"precision":0.2798134576948701,"lift":2.423542989036353},{"share":11,"recall":0.25389497980380843,"precision":0.2665051483949122,"lift":2.3082759823471624},{"share":12,"recall":0.27351413733410274,"precision":0.2631871182676291,"lift":2.2795375909966027},{"share":13,"recall":0.2971725331794576,"precision":0.2639671963095848,"lift":2.286294066132065},{"share":14,"recall":0.30813618003462206,"precision":0.2541646834840552,"lift":2.2013917478913263},{"share":15,"recall":0.3271783035199077,"precision":0.25177619893428066,"lift":2.180704412004358},{"share":16,"recall":0.3404500865551068,"precision":0.2456286427976686,"lift":2.1274587007461085},{"share":17,"recall":0.3537218695903058,"precision":0.24020376175548588,"lift":2.080472281563672},{"share":18,"recall":0.3704558568955568,"precision":0.23760177646188008,"lift":2.0579357557373457},{"share":19,"recall":0.3831506058857473,"precision":0.23281907433380084,"lift":2.0165114285922394},{"share":20,"recall":0.3941142527409117,"precision":0.22751499000666223,"lift":1.9705712637045587},{"share":21,"recall":0.4068090017311021,"precision":0.22366751269035534,"lift":1.9372471814669554},{"share":22,"recall":0.4171956145412579,"precision":0.21895820714718353,"lift":1.8964585627693162},{"share":23,"recall":0.4345066358915176,"precision":0.21813441483198145,"lift":1.8893234660288758},{"share":24,"recall":0.448932487016734,"precision":0.21599111604664076,"lift":1.870759752948689},{"share":25,"recall":0.4616272360069244,"precision":0.21321961620469082,"lift":1.8467550139829252},{"share":26,"recall":0.4760530871321408,"precision":0.21137586471944658,"lift":1.830785764246332},{"share":27,"recall":0.4870167339873053,"precision":0.20824080927707872,"lift":1.8036321680605607},{"share":28,"recall":0.4979803808424697,"precision":0.20532952652867,"lift":1.778416730060783},{"share":29,"recall":0.5089440276976341,"precision":0.20261888352860097,"lift":1.7549390893042704},{"share":30,"recall":0.5204847085978073,"precision":0.2003109038418832,"lift":1.7349490286593576},{"share":31,"recall":0.5291402192729371,"precision":0.19707715452396304,"lift":1.7069406170829113},{"share":32,"recall":0.5412579342181189,"precision":0.19529460753695607,"lift":1.6915014767049688},{"share":33,"recall":0.5539526832083093,"precision":0.19382192610539067,"lift":1.6787461689797543},{"share":34,"recall":0.5678015002885171,"precision":0.19282774838330394,"lift":1.670135316349332},{"share":35,"recall":0.5758799769186382,"precision":0.18995051389417586,"lift":1.645214779891275},{"share":36,"recall":0.5874206578188114,"precision":0.18837897853441896,"lift":1.6316032705145},{"share":37,"recall":0.5966532025389498,"precision":0.18617212819589485,"lift":1.6124891195732152},{"share":38,"recall":0.6053087132140796,"precision":0.18390603085553997,"lift":1.5928618136997432},{"share":39,"recall":0.6145412579342181,"precision":0.18192688759822342,"lift":1.5757198977780345},{"share":40,"recall":0.6237738026543566,"precision":0.18004663557628248,"lift":1.5594345066358917},{"share":41,"recall":0.6330063473744951,"precision":0.17825804354891128,"lift":1.543943008464604},{"share":42,"recall":0.6399307559145989,"precision":0.1759200507614213,"lift":1.5236929959197543},{"share":43,"recall":0.6474321984997115,"precision":0.17384567709947318,"lift":1.5057262627023038},{"share":44,"recall":0.65666474321985,"precision":0.17231980617807388,"lift":1.4925102658585627},{"share":45,"recall":0.668205424120023,"precision":0.17145395321291088,"lift":1.4850108700091127},{"share":46,"recall":0.6780150028851702,"precision":0.17016654598117306,"lift":1.4738602741935418},{"share":47,"recall":0.6855164454702828,"precision":0.16839121190644932,"lift":1.458483606875825},{"share":48,"recall":0.6993652625504905,"precision":0.16821651630811937,"lift":1.4569705192065043},{"share":49,"recall":0.7074437391806117,"precision":0.16668932698844324,"lift":1.443743103344797},{"share":50,"recall":0.7178303519907675,"precision":0.16575616255829448,"lift":1.435660703981535},{"share":51,"recall":0.7241777264858626,"precision":0.16394513389941215,"lift":1.4199748758396864},{"share":52,"recall":0.7311021350259665,"precision":0.16233183856502242,"lift":1.406001671587413},{"share":53,"recall":0.7380265435660704,"precision":0.16077938403519798,"lift":1.3925554266406934},{"share":54,"recall":0.7455279861511829,"precision":0.1594077729796422,"lift":1.3806755178444488},{"share":55,"recall":0.7489901904212348,"precision":0.15721899224806202,"lift":1.361717872846746},{"share":56,"recall":0.7547605308713214,"precision":0.15560314061384725,"lift":1.347722527763328},{"share":57,"recall":0.7634160415464513,"precision":0.15462833099579243,"lift":1.3392794277246651},{"share":58,"recall":0.7703404500865552,"precision":0.15334252239834598,"lift":1.3281426781299326},{"share":59,"recall":0.7801500288517023,"precision":0.15266485998193316,"lift":1.3222732535076842},{"share":60,"recall":0.7888055395268321,"precision":0.15178769709082834,"lift":1.314675899211387},{"share":61,"recall":0.7945758799769186,"precision":0.1503931847968545,"lift":1.3025976363535985},{"share":62,"recall":0.8032313906520485,"precision":0.14958091553836234,"lift":1.295562344045481},{"share":63,"recall":0.8101557991921523,"precision":0.1484771573604061,"lift":1.2860023842929575},{"share":64,"recall":0.8159261396422389,"precision":0.14719966687486988,"lift":1.2749376802029988},{"share":65,"recall":0.8222735141373341,"precision":0.1460639606396064,"lift":1.2651010093482353},{"share":66,"recall":0.8280438545874207,"precision":0.14484707782376097,"lift":1.254561245317168},{"share":67,"recall":0.8343912290825158,"precision":0.14378045142686685,"lift":1.2453228943550327},{"share":68,"recall":0.8407386035776111,"precision":0.14274517487998434,"lift":1.236356073253644},{"share":69,"recall":0.8465089440276976,"precision":0.14164333301148982,"lift":1.2268127111958813},{"share":70,"recall":0.8505481823427582,"precision":0.14028742742933284,"lift":1.2150688319182261},{"share":71,"recall":0.8557414887478362,"precision":0.13915736135873136,"lift":1.2052810121145745},{"share":72,"recall":0.8620888632429313,"precision":0.13824373091514758,"lift":1.1973678020983065},{"share":73,"recall":0.8707443739180611,"precision":0.1377201788810806,"lift":1.192833170804974},{"share":74,"recall":0.875937680323139,"precision":0.13667056811020079,"lift":1.1837421969614044},{"share":75,"recall":0.8828620888632429,"precision":0.13590335761236455,"lift":1.177097171241542},{"share":76,"recall":0.8880553952683208,"precision":0.13490532959326787,"lift":1.168452970106723},{"share":77,"recall":0.8955568378534333,"precision":0.13427928707388823,"lift":1.1630306399186743},{"share":78,"recall":0.8995960761684939,"precision":0.1331568158524086,"lift":1.153308601237538},{"share":79,"recall":0.9059434506635892,"precision":0.13240006746500252,"lift":1.146754190796127},{"share":80,"recall":0.9117137911136757,"precision":0.13157894736842105,"lift":1.1396422388920946},{"share":81,"recall":0.9186381996537796,"precision":0.13094258924165159,"lift":1.1341305623295963},{"share":82,"recall":0.9232544720138488,"precision":0.12999675008124797,"lift":1.1259383835658006},{"share":83,"recall":0.93133294864397,"precision":0.12955530582758068,"lift":1.1221149108320752},{"share":84,"recall":0.9359492210040392,"precision":0.1286484771573604,"lift":1.1142606128863126},{"share":85,"recall":0.9388343912290825,"precision":0.12752782567800597,"lift":1.1045543355030985},{"share":86,"recall":0.9469128678592037,"precision":0.12712061352544737,"lift":1.1010273566168294},{"share":87,"recall":0.9503750721292556,"precision":0.12611991729841487,"lift":1.0923600453832703},{"share":88,"recall":0.9521061742642816,"precision":0.12491483079718374,"lift":1.0819224525480253},{"share":89,"recall":0.9578765147143682,"precision":0.12426079796391945,"lift":1.0762576903857075},{"share":90,"recall":0.9624927870744374,"precision":0.12347324006218077,"lift":1.0694364300827084},{"share":91,"recall":0.966532025389498,"precision":0.12262976791858847,"lift":1.0621308808182417},{"share":92,"recall":0.9711482977495672,"precision":0.12187703671518575,"lift":1.0556112643363753},{"share":93,"recall":0.9746105020196192,"precision":0.12099720610358908,"lift":1.0479908041632269},{"share":94,"recall":0.979803808424697,"precision":0.12034871358707208,"lift":1.0423740282411726},{"share":95,"recall":0.983266012694749,"precision":0.11949509116409537,"lift":1.034980564554571},{"share":96,"recall":0.9878822850548182,"precision":0.11880638445523942,"lift":1.0290154822118545},{"share":97,"recall":0.9896133871898442,"precision":0.11778846153846154,"lift":1.0201989657774424},{"share":98,"recall":0.9948066935949221,"precision":0.11719918422841605,"lift":1.0150950693990335},{"share":99,"recall":0.9976918638199653,"precision":0.11635262449528937,"lift":1.0077627776539488},{"share":100,"recall":1.0,"precision":0.11545636242504996,"lift":1.0}],"roc":[[0.0,0.0],[0.0017,0.0115],[0.0038,0.0237],[0.0062,0.0387],[0.0079,0.0479],[0.0108,0.0589],[0.0128,0.0692],[0.0154,0.0802],[0.0185,0.0906],[0.0221,0.101],[0.0254,0.1114],[0.0273,0.1212],[0.0294,0.1321],[0.0342,0.1402],[0.0366,0.1495],[0.0396,0.1581],[0.0454,0.1679],[0.0484,0.1777],[0.0528,0.1852],[0.057,0.195],[0.0621,0.2054],[0.0658,0.2123],[0.0709,0.2204],[0.0738,0.2302],[0.0798,0.24],[0.0862,0.2481],[0.092,0.255],[0.0966,0.2654],[0.1004,0.2747],[0.1036,0.2845],[0.1073,0.2949],[0.113,0.3024],[0.1187,0.3104],[0.1241,0.3191],[0.1282,0.3283],[0.1337,0.337],[0.1396,0.3451],[0.1456,0.3531],[0.1494,0.3618],[0.1551,0.3705],[0.1612,0.378],[0.1676,0.386],[0.1747,0.3941],[0.1808,0.4016],[0.188,0.4103],[0.1943,0.4178],[0.1988,0.4253],[0.2039,0.4351],[0.2092,0.4432],[0.216,0.4524],[0.2228,0.4622],[0.2276,0.4697],[0.233,0.4772],[0.2397,0.4853],[0.2453,0.4939],[0.2553,0.5026],[0.2634,0.5107],[0.2701,0.5188],[0.2766,0.5263],[0.285,0.5343],[0.2916,0.5418],[0.2995,0.5505],[0.3035,0.5597],[0.3099,0.5666],[0.3185,0.5759],[0.327,0.5845],[0.3356,0.592],[0.3453,0.6001],[0.3538,0.6088],[0.3614,0.6157],[0.3706,0.6238],[0.3799,0.6313],[0.391,0.6388],[0.4016,0.648],[0.4103,0.6549],[0.4161,0.663],[0.4261,0.6711],[0.4363,0.6797],[0.444,0.6884],[0.45,0.6959],[0.4551,0.7034],[0.4673,0.7109],[0.4758,0.7196],[0.4893,0.7276],[0.5,0.7357],[0.5095,0.7426],[0.5287,0.7501],[0.54,0.7576],[0.5492,0.7657],[0.5566,0.7738],[0.5663,0.7807],[0.5788,0.7888],[0.5887,0.7957],[0.5968,0.8038],[0.609,0.8125],[0.6247,0.8194],[0.6359,0.8269],[0.6479,0.8338],[0.6609,0.8419],[0.6784,0.85],[0.6938,0.8569],[0.7031,0.8638],[0.7164,0.8725],[0.7264,0.88],[0.7411,0.8869],[0.75,0.8938],[0.7654,0.9013],[0.7824,0.91],[0.7948,0.9181],[0.8086,0.9256],[0.8224,0.9331],[0.8406,0.9406],[0.8579,0.9492],[0.876,0.9561],[0.8955,0.9642],[0.9168,0.9711],[0.931,0.9781],[0.9504,0.9856],[0.9694,0.9925],[1.0,1.0]],"deciles":[{"decile":1,"predicted":0.2894285649803055,"observed":0.2798134576948701,"n":1501},{"decile":2,"predicted":0.1756497329498159,"observed":0.17521652231845436,"n":1501},{"decile":3,"predicted":0.13374570353278364,"observed":0.1459027315123251,"n":1501},{"decile":4,"predicted":0.1135400570438364,"observed":0.11925383077948035,"n":1501},{"decile":5,"predicted":0.10265162258490461,"observed":0.10859427048634245,"n":1501},{"decile":6,"predicted":0.0901286859007149,"observed":0.08194536975349767,"n":1501},{"decile":7,"predicted":0.08041395706162097,"observed":0.07128580946035976,"n":1501},{"decile":8,"predicted":0.0675960473244342,"observed":0.07061958694203864,"n":1501},{"decile":9,"predicted":0.047756469259996076,"observed":0.05862758161225849,"n":1501},{"decile":10,"predicted":0.03697967624227838,"observed":0.04330446369087275,"n":1501}],"n_test":15010,"positives":1733,"flagged_now":0.19920053297801465}};
+const $ = (id) => document.getElementById(id);
+const R = D.metrics.result, C = D.curves;
+const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+const fmt = (x) => Math.round(x).toLocaleString("en-US");
+const MODELS = { spark_logreg: ["Spark MLlib logistic regression", "#8c8b86"], lightgbm: ["LightGBM", "#2a78d6"],
+                 deep_mlp: ["PyTorch embeddings network", "#eb6834"], ensemble: ["Ensemble (LightGBM + network)", "#1baf7a"] };
+Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+const tip = { backgroundColor: "#101820", titleColor: "#fff", bodyColor: "#e5e9ec", padding: 10, cornerRadius: 8, displayColors: false };
+const ax = (title, fmtFn) => ({ grid: { color: "#eff1f3", drawTicks: false }, border: { display: false },
+  ticks: { color: "#5f6b75", padding: 6, callback: fmtFn }, title: { display: !!title, text: title, color: "#8b96a0" } });
+
+const c = R.champion_test_calibrated, op = R.operating_point;
+$("lede").textContent = `The production model (${MODELS[R.champion][0]}) ranks patients by risk at discharge. Flagging the riskiest ${pct(op.flagged_share)} catches ${pct(op.recall)} of 30-day readmissions, ${op.lift.toFixed(1)}x better than picking patients at random, and its probabilities match observed rates within ${(R.ece_calibrated * 100).toFixed(1)} points on average.`;
+$("stats").innerHTML = [
+  ["ROC-AUC", c.roc_auc.toFixed(3), `95% CI ${c.roc_auc_95ci[0].toFixed(3)}–${c.roc_auc_95ci[1].toFixed(3)}`],
+  ["PR-AUC", c.pr_auc.toFixed(3), `base rate ${pct(R.base_rate_test, 1)}`],
+  ["Lift at 20% capacity", op.lift.toFixed(2) + "x", `recall ${pct(op.recall)}, precision ${pct(op.precision)}`],
+  ["Calibration error", (R.ece_calibrated * 100).toFixed(2) + " pts", "expected calibration error"],
+  ["vs Spark baseline", "+" + R.vs_baseline.delta.toFixed(3), `ROC-AUC, 95% CI +${R.vs_baseline.ci95[0].toFixed(3)} to +${R.vs_baseline.ci95[1].toFixed(3)}`],
+].map(([l, v, s]) => `<div class="stat"><span class="l">${l}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join("");
+
+// capacity planner
+let gainsChart;
+function plan() {
+  const share = +$("cap").value, row = C.capacity[share - 1];
+  const flagged = Math.round(C.n_test * share / 100), caught = Math.round(row.recall * C.positives);
+  $("capV").textContent = share + "%";
+  $("pout").innerHTML = [["Readmissions caught", pct(row.recall)], ["Precision", pct(row.precision)], ["Lift vs random", row.lift.toFixed(2) + "x"]]
+    .map(([l, v]) => `<div><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  $("psent").innerHTML = `Of every <b>${fmt(C.n_test)}</b> discharges, the team calls <b>${fmt(flagged)}</b> and reaches <b>${fmt(caught)}</b> of the <b>${fmt(C.positives)}</b> patients who will be readmitted. Random calls would reach about <b>${fmt(C.positives * share / 100)}</b>.`;
+  if (gainsChart) { gainsChart.data.datasets[2].data = [{ x: share, y: row.recall * 100 }]; gainsChart.update("none"); }
+}
+gainsChart = new Chart($("gains"), { type: "line", data: { datasets: [
+  { label: "Model", data: [{ x: 0, y: 0 }, ...C.capacity.map((r) => ({ x: r.share, y: r.recall * 100 }))], borderColor: "#0f766e", borderWidth: 2.5, pointRadius: 0, fill: { target: "origin", above: "rgba(15,118,110,0.08)" } },
+  { label: "Random", data: [{ x: 0, y: 0 }, { x: 100, y: 100 }], borderColor: "#c3c9cf", borderWidth: 1.5, borderDash: [5, 4], pointRadius: 0 },
+  { label: "Your capacity", data: [{ x: 20, y: 39 }], pointRadius: 7, pointBackgroundColor: "#0f766e", pointBorderColor: "#fff", pointBorderWidth: 2, showLine: false },
+] }, options: { responsive: true, maintainAspectRatio: false, animation: false, interaction: { mode: "nearest", intersect: false },
+  plugins: { legend: { display: false }, tooltip: { ...tip, callbacks: { title: (i) => `Flag top ${i[0].parsed.x}% of patients`, label: (i) => `${i.dataset.label}: catch ${i.parsed.y.toFixed(0)}% of readmissions` } } },
+  scales: { x: { ...ax("Share of discharges flagged", (v) => v + "%"), type: "linear", min: 0, max: 100 }, y: { ...ax("Readmissions caught", (v) => v + "%"), min: 0, max: 100 } } } });
+$("cap").addEventListener("input", plan);
+plan();
+
+// calibration deciles
+new Chart($("cal"), { type: "bar", data: { labels: C.deciles.map((d) => d.decile === 1 ? "Top 10%" : d.decile === 10 ? "Lowest" : "D" + d.decile), datasets: [
+  { label: "Predicted", data: C.deciles.map((d) => d.predicted * 100), backgroundColor: "#14b8a6", borderRadius: 4, barPercentage: 0.8, categoryPercentage: 0.7 },
+  { label: "Observed", data: C.deciles.map((d) => d.observed * 100), backgroundColor: "#101820", borderRadius: 4, barPercentage: 0.8, categoryPercentage: 0.7 },
+] }, options: { responsive: true, maintainAspectRatio: false, animation: false, interaction: { mode: "index", intersect: false },
+  plugins: { legend: { display: false }, tooltip: { ...tip, displayColors: true, callbacks: { label: (i) => ` ${i.dataset.label}: ${i.parsed.y.toFixed(1)}%` } } },
+  scales: { x: { grid: { display: false }, ticks: { color: "#5f6b75" } }, y: { ...ax("Readmitted within 30 days", (v) => v + "%"), beginAtZero: true } } } });
+
+// model table
+let metric = "roc_auc";
+function drawModels() {
+  const order = ["spark_logreg", "deep_mlp", "ensemble", "lightgbm"].filter((m) => R.test[m]);
+  const best = Math.max(...order.map((m) => R.test[m][metric])), lo = Math.min(...order.map((m) => R.test[m][metric]));
+  $("models").innerHTML = `<thead><tr><th>Model</th><th class="n">Validation</th><th class="n">Test</th><th></th></tr></thead><tbody>` +
+    order.map((m) => { const t = R.test[m][metric], w = 30 + 110 * (t - lo * 0.98) / (best - lo * 0.98);
+      return `<tr class="${m === R.champion ? "champ" : ""}"><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${MODELS[m][1]};margin-right:8px"></span>${MODELS[m][0]}${m === R.champion ? '<span class="badge">production</span>' : ""}</td>
+      <td class="n">${R.valid[m][metric].toFixed(3)}</td><td class="n">${t.toFixed(3)}</td><td><span class="bar" style="width:${w.toFixed(0)}px;background:${MODELS[m][1]}"></span></td></tr>`; }).join("") + "</tbody>";
+  $("modelNote").textContent = "The ensemble was slightly better on validation but not by enough to justify running two models in production, so the simpler LightGBM was promoted; the test set confirmed it.";
+  document.querySelectorAll("#metricSeg button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.m === metric));
+}
+$("metricSeg").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { metric = b.dataset.m; drawModels(); } });
+drawModels();
+
+// SHAP
+const LABELS = { discharge_disposition_id: "Discharge destination", number_inpatient: "Inpatient visits, past year", prior_encounters: "Earlier encounters (history)",
+  payer_code: "Insurance payer", diag_1_group: "Primary diagnosis group", medical_specialty: "Admitting specialty", number_diagnoses: "Number of diagnoses",
+  total_prior_visits: "All prior visits", insulin: "Insulin change", diag_2_group: "Secondary diagnosis", age_years: "Age", n_meds_active: "Diabetes medications",
+  diag_3_group: "Third diagnosis", num_medications: "Medications given", num_lab_procedures: "Lab procedures", admission_source_id: "Admission source",
+  time_in_hospital: "Length of stay", number_emergency: "Emergency visits", A1Cresult: "HbA1c result" };
+const sh = D.shap.slice(0, 12);
+new Chart($("shap"), { type: "bar", data: { labels: sh.map((s) => LABELS[s.feature] || s.feature), datasets: [{ data: sh.map((s) => s.mean_abs_shap), backgroundColor: "#0f766e", borderRadius: 4, barPercentage: 0.7 }] },
+  options: { indexAxis: "y", responsive: true, maintainAspectRatio: false, animation: false,
+    plugins: { legend: { display: false }, tooltip: { ...tip, callbacks: { label: (i) => ` mean |SHAP| ${i.parsed.x.toFixed(3)} (log-odds)` } } },
+    scales: { x: ax("", (v) => v.toFixed(2)), y: { grid: { display: false }, ticks: { color: "#101820", font: { size: 12 } } } } } });
+
+// fairness
+let attr = "race";
+function drawFair() {
+  const overall = op.recall;
+  const rows = D.metrics.fairness.filter((r) => r.attribute === attr);
+  $("fair").innerHTML = `<thead><tr><th>Group</th><th class="n">Patients</th><th class="n">Readmit rate</th><th class="n">ROC-AUC</th><th class="n">Flagged</th><th>Recall</th><th class="n">Gap vs overall ${pct(overall)}</th></tr></thead><tbody>` +
+    rows.map((r) => { const g = r.recall - overall, cls = Math.abs(g) > 0.10 ? "bad" : Math.abs(g) > 0.05 ? "warn" : "";
+      return `<tr><td>${r.group}</td><td class="n">${fmt(r.n)}</td><td class="n">${pct(r.readmit_rate, 1)}</td><td class="n">${r.roc_auc.toFixed(3)}</td><td class="n">${pct(r.flag_rate)}</td>
+      <td><span class="bar" style="width:${Math.round(r.recall * 140)}px"></span><span class="mono">${pct(r.recall)}</span></td>
+      <td class="n"><span class="gap ${cls}">${g >= 0 ? "+" : "−"}${Math.abs(g * 100).toFixed(1)} pts</span></td></tr>`; }).join("") + "</tbody>";
+  document.querySelectorAll("#attrSeg button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.a === attr));
+}
+$("attrSeg").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { attr = b.dataset.a; drawFair(); } });
+drawFair();
+</script>
+</body>
+</html>
