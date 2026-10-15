@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>madhubuddaraju: data and ML projects</title>
-<meta name="description" content="Six data engineering, machine learning and NLP projects, each with a live page and public code.">
+<meta name="description" content="Eight data engineering, machine learning and NLP projects, each with a live page and public code.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
@@ -71,6 +71,7 @@ svg.ev .base { stroke: var(--ink); stroke-width: 1; }
 svg.ev .ref { stroke: var(--faint); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
 svg.ev .dot { fill: var(--cobalt); }
 svg.ev .bar { fill: var(--cobalt); opacity: .85; }
+svg.ev .bar.down { fill: #c4472b; opacity: .8; }
 svg.ev .v { font-size: 15px; font-weight: 700; fill: var(--ink); }
 svg.ev .l { font-size: 12px; fill: var(--faint); }
 
@@ -117,15 +118,15 @@ footer a { color: var(--graphite); text-underline-offset: 3px; }
 
   <section class="intro">
     <h1>I build data pipelines, models and the pages that show whether they work.</h1>
-    <p>Six projects, each built end to end: getting the data, modeling it in SQL, testing its quality, analysis or machine learning, and a live page with the results. Five use real public data, from CDC hospital admissions to FDA drug labels; one uses deliberately messy synthetic data. The code and the evaluation for every one are public.</p>
+    <p>Eight projects, each built end to end: getting the data, modeling it in SQL, testing its quality, analysis or machine learning, and a live page with the results. Seven use real public data, from live subway feeds to Medicare and FDA records; one uses deliberately messy synthetic data. The code and the evaluation for every one are public.</p>
   </section>
 
   <main id="projects">
     <div class="bar">
       <h2>Projects</h2>
       <div class="filter" role="group" aria-label="Show projects by area">
-        <button type="button" aria-pressed="true" data-f="all">All<span>6</span></button>
-        <button type="button" aria-pressed="false" data-f="de">Data engineering<span>3</span></button>
+        <button type="button" aria-pressed="true" data-f="all">All<span>8</span></button>
+        <button type="button" aria-pressed="false" data-f="de">Data engineering<span>5</span></button>
         <button type="button" aria-pressed="false" data-f="ml">Machine learning<span>2</span></button>
         <button type="button" aria-pressed="false" data-f="nlp">NLP and LLMs<span>2</span></button>
       </div>
@@ -142,6 +143,32 @@ footer a { color: var(--graphite); text-underline-offset: 3px; }
       <figure>
         <ol class="ladder" aria-label="Questions answered in the top 5 results, as each change was added"><li><span class="step">Keyword search</span><span class="track"><span class="fill" style="width:35.2%"></span></span><span class="pct">35%</span></li><li><span class="step">+ drug names in each passage</span><span class="track"><span class="fill" style="width:60.0%"></span></span><span class="pct">60%</span></li><li><span class="step">+ search only the named drug</span><span class="track"><span class="fill" style="width:68.1%"></span></span><span class="pct">68%</span></li><li><span class="step">+ semantic search and section hints</span><span class="track"><span class="fill" style="width:98.0%"></span></span><span class="pct">98%</span></li></ol>
         <figcaption>Questions with the right passage in the top 5, as each change was added. 690 labeled questions.</figcaption>
+      </figure>
+    </article>
+    <article class="entry" id="nyc-subway-live" data-tags="de">
+      <div class="txt">
+        <h3><a href="https://madhubuddaraju.github.io/nyc-subway-live/">Subway Line Watch</a></h3>
+        <p class="what">Spots NYC subway delays as they form: every train's live position goes through Kafka and Spark Structured Streaming, which flags service gaps and bunched trains platform by platform.</p>
+        <p class="result"><b>2,152</b> train intervals measured across 25 lines in the first 20-minute session, <b>81%</b> within the schedule standard. Gap alerts go out before the late train arrives.</p>
+        <p class="stack">Apache Kafka, Spark Structured Streaming (stateful, watermarks, timeouts), GTFS-realtime, Docker</p>
+        <p class="links"><a class="open" href="https://madhubuddaraju.github.io/nyc-subway-live/">Open the live board</a><a href="https://github.com/madhubuddaraju/nyc-subway-live">Source code</a><span class="fresh">Streams every hour</span></p>
+      </div>
+      <figure>
+        <svg viewBox="0 0 360 150" role="img" aria-label="Share of train intervals within 25 percent of schedule, by line" class="ev"><rect x="8.5" y="42.0" width="8.8" height="86.0" class="bar"/><text x="12.9" y="144" class="l" text-anchor="middle">1</text><rect x="22.3" y="51.6" width="8.8" height="76.4" class="bar"/><text x="26.7" y="144" class="l" text-anchor="middle">2</text><rect x="36.1" y="45.9" width="8.8" height="82.1" class="bar"/><text x="40.5" y="144" class="l" text-anchor="middle">3</text><rect x="49.9" y="85.8" width="8.8" height="42.2" class="bar down"/><text x="54.3" y="144" class="l" text-anchor="middle">4</text><rect x="63.7" y="66.4" width="8.8" height="61.6" class="bar"/><text x="68.1" y="144" class="l" text-anchor="middle">5</text><rect x="77.5" y="87.2" width="8.8" height="40.8" class="bar down"/><text x="82.0" y="144" class="l" text-anchor="middle">6</text><rect x="91.3" y="92.4" width="8.8" height="35.6" class="bar down"/><text x="95.8" y="144" class="l" text-anchor="middle">7</text><rect x="105.2" y="52.5" width="8.8" height="75.5" class="bar"/><text x="109.6" y="144" class="l" text-anchor="middle">A</text><rect x="119.0" y="62.8" width="8.8" height="65.2" class="bar"/><text x="123.4" y="144" class="l" text-anchor="middle">C</text><rect x="132.8" y="49.3" width="8.8" height="78.7" class="bar"/><text x="137.2" y="144" class="l" text-anchor="middle">E</text><rect x="146.6" y="57.8" width="8.8" height="70.2" class="bar"/><text x="151.0" y="144" class="l" text-anchor="middle">B</text><rect x="160.4" y="45.9" width="8.8" height="82.1" class="bar"/><text x="164.8" y="144" class="l" text-anchor="middle">D</text><rect x="174.2" y="65.8" width="8.8" height="62.2" class="bar"/><text x="178.6" y="144" class="l" text-anchor="middle">F</text><rect x="188.0" y="74.9" width="8.8" height="53.1" class="bar down"/><text x="192.4" y="144" class="l" text-anchor="middle">M</text><rect x="201.8" y="67.1" width="8.8" height="60.9" class="bar"/><text x="206.2" y="144" class="l" text-anchor="middle">G</text><rect x="215.6" y="32.0" width="8.8" height="96.0" class="bar"/><text x="220.0" y="144" class="l" text-anchor="middle">J</text><rect x="229.4" y="41.4" width="8.8" height="86.6" class="bar"/><text x="233.9" y="144" class="l" text-anchor="middle">L</text><rect x="243.2" y="46.1" width="8.8" height="81.9" class="bar"/><text x="247.7" y="144" class="l" text-anchor="middle">N</text><rect x="257.1" y="20.6" width="8.8" height="107.4" class="bar"/><text x="261.5" y="144" class="l" text-anchor="middle">Q</text><rect x="270.9" y="41.4" width="8.8" height="86.6" class="bar"/><text x="275.3" y="144" class="l" text-anchor="middle">R</text><rect x="284.7" y="27.5" width="8.8" height="100.5" class="bar"/><text x="289.1" y="144" class="l" text-anchor="middle">W</text><line x1="6" x2="296" y1="71.0" y2="71.0" class="ref"/><text x="304.0" y="75.0" class="l">75% target</text><text x="304.0" y="20.0" class="l">100%</text><text x="304.0" y="128.0" class="l">50%</text></svg>
+        <figcaption>Share of intervals within 25% of schedule by line, first live session (2,152 intervals, 20 minutes).</figcaption>
+      </figure>
+    </article>
+    <article class="entry" id="hospital-quality-warehouse" data-tags="de">
+      <div class="txt">
+        <h3><a href="https://madhubuddaraju.github.io/hospital-quality-warehouse/">Hospital Quality Warehouse</a></h3>
+        <p class="what">Helps people choose a hospital: enter a ZIP code and a reason for care, and see nearby hospitals ranked on the Medicare measures that matter for it. Built as a tested dbt warehouse run by Dagster.</p>
+        <p class="result"><b>5,419</b> hospitals, 30 measures, and rating history rebuilt from <b>25</b> past releases through a dbt snapshot. A watch list flags <b>182</b> hospitals.</p>
+        <p class="stack">dbt (contracts, unit tests, snapshots), Dagster, DuckDB, SQL, CMS and Census APIs</p>
+        <p class="links"><a class="open" href="https://madhubuddaraju.github.io/hospital-quality-warehouse/">Find a hospital</a><a href="https://github.com/madhubuddaraju/hospital-quality-warehouse">Source code</a><span class="fresh">Refreshes every Monday</span></p>
+      </div>
+      <figure>
+        <svg viewBox="0 0 360 150" role="img" aria-label="Hospitals whose star rating went up or down at each annual Medicare update" class="ev"><rect x="16.6" y="14.0" width="27.1" height="57.0" class="bar"/><rect x="16.6" y="71.0" width="27.1" height="49.4" class="bar down"/><text x="30.2" y="146" class="l" text-anchor="middle">2021</text><rect x="65.0" y="41.1" width="27.1" height="29.9" class="bar"/><rect x="65.0" y="71.0" width="27.1" height="36.3" class="bar down"/><text x="78.5" y="146" class="l" text-anchor="middle">2022</text><rect x="113.3" y="30.7" width="27.1" height="40.3" class="bar"/><rect x="113.3" y="71.0" width="27.1" height="45.7" class="bar down"/><text x="126.8" y="146" class="l" text-anchor="middle">2023</text><rect x="161.6" y="36.5" width="27.1" height="34.5" class="bar"/><rect x="161.6" y="71.0" width="27.1" height="44.0" class="bar down"/><text x="175.2" y="146" class="l" text-anchor="middle">2024</text><rect x="210.0" y="39.9" width="27.1" height="31.1" class="bar"/><rect x="210.0" y="71.0" width="27.1" height="40.3" class="bar down"/><text x="223.5" y="146" class="l" text-anchor="middle">2025</text><rect x="258.3" y="24.3" width="27.1" height="46.7" class="bar"/><rect x="258.3" y="71.0" width="27.1" height="29.2" class="bar down"/><text x="271.8" y="146" class="l" text-anchor="middle">2026</text><line x1="6" x2="296" y1="71.0" y2="71.0" class="base"/><text x="304.0" y="47.0" class="v">+812</text><text x="304.0" y="61.0" class="l">up in 2026</text><text x="304.0" y="91.0" class="v">−509</text><text x="304.0" y="105.0" class="l">down</text></svg>
+        <figcaption>Hospitals whose star rating went up (above) or down (below) at each annual update, 25 releases replayed.</figcaption>
       </figure>
     </article>
     <article class="entry" id="consumer-complaints-nlp" data-tags="nlp">
@@ -214,7 +241,7 @@ footer a { color: var(--graphite); text-underline-offset: 3px; }
   <section class="tools" id="tools">
     <h2>Tools, and where I used them</h2>
     <p>Each one is in at least one project above, with code you can read.</p>
-    <dl><div><dt>Python</dt><dd>all six</dd></div><div><dt>SQL and DuckDB</dt><dd>surveillance, climate, e-commerce</dd></div><div><dt>PySpark and MySQL</dt><dd>readmission risk</dd></div><div><dt>LightGBM</dt><dd>readmission risk, surveillance forecasts</dd></div><div><dt>PyTorch</dt><dd>readmission risk</dd></div><div><dt>scikit-learn</dt><dd>complaint routing</dd></div><div><dt>Transformers (DistilBERT)</dt><dd>complaint routing</dd></div><div><dt>Embeddings and hybrid search</dt><dd>drug labels</dd></div><div><dt>Open-source LLMs and evaluation</dt><dd>drug labels</dd></div><div><dt>MLflow, FastAPI, Docker</dt><dd>readmission risk</dd></div><div><dt>GitHub Actions</dt><dd>tests on every project; weekly refreshes for surveillance and climate</dd></div><div><dt>JavaScript</dt><dd>every live page; in-browser models for drug labels and complaints</dd></div></dl>
+    <dl><div><dt>Python</dt><dd>all six</dd></div><div><dt>SQL and DuckDB</dt><dd>hospital warehouse, surveillance, climate, e-commerce</dd></div><div><dt>dbt and Dagster</dt><dd>hospital warehouse</dd></div><div><dt>Kafka and Spark Streaming</dt><dd>subway line watch</dd></div><div><dt>PySpark and MySQL</dt><dd>readmission risk; Spark streaming for the subway</dd></div><div><dt>LightGBM</dt><dd>readmission risk, surveillance forecasts</dd></div><div><dt>PyTorch</dt><dd>readmission risk</dd></div><div><dt>scikit-learn</dt><dd>complaint routing</dd></div><div><dt>Transformers (DistilBERT)</dt><dd>complaint routing</dd></div><div><dt>Embeddings and hybrid search</dt><dd>drug labels</dd></div><div><dt>Open-source LLMs and evaluation</dt><dd>drug labels</dd></div><div><dt>MLflow, FastAPI, Docker</dt><dd>readmission risk</dd></div><div><dt>GitHub Actions</dt><dd>tests on every project; scheduled runs for subway, hospitals, surveillance and climate</dd></div><div><dt>JavaScript</dt><dd>every live page; in-browser models for drug labels and complaints</dd></div></dl>
   </section>
 
   <footer>Hosted on GitHub Pages. Every project's source is on <a href="https://github.com/madhubuddaraju">GitHub</a>, and the dashboards refresh from their own repositories.</footer>
