@@ -19,7 +19,7 @@ jobs:
       - name: Fetch latest dashboards
         run: |
           set -euo pipefail
-          for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline consumer-complaints-nlp drug-label-rag hospital-quality-warehouse nyc-subway-live; do
+          for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline consumer-complaints-nlp drug-label-rag hospital-quality-warehouse nyc-subway-live pitstop; do
             mkdir -p "$repo"
             curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/$repo/main/docs/index.html" -o "$repo/index.html.new"
             # only accept a real page (guards against an empty or error response)
@@ -28,6 +28,9 @@ jobs:
           # the hospital warehouse also publishes its dbt docs (lineage graph)
           curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/hospital-quality-warehouse/main/docs/lineage.html" -o lineage.html.new
           if grep -q "</html>" lineage.html.new; then mv lineage.html.new hospital-quality-warehouse/lineage.html; else rm lineage.html.new; fi
+          # Pitstop's page imports its logic module (its data files are read from the repo directly)
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/pitstop/main/docs/core.js" -o core.js.new
+          if grep -q "export function" core.js.new; then mv core.js.new pitstop/core.js; else rm core.js.new; fi
           # the drug label search also needs its browser index
           curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/drug-label-rag/main/docs/corpus.json" -o corpus.json.new
           if python3 -c "import json; json.load(open('corpus.json.new'))"; then mv corpus.json.new drug-label-rag/corpus.json; else rm corpus.json.new; fi
