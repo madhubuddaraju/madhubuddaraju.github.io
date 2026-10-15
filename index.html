@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>madhubuddaraju · Data & ML Projects</title>
+<meta name="description" content="Data engineering, analytics and machine learning projects on real data, each with a live dashboard and source code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: personal portfolio on white - large serif intro, project cards in a 2-column grid, skills strip */
+:root {
+  color-scheme: light;
+  --bg: #ffffff; --ink: #121417; --ink-2: #4b5259; --ink-3: #8c939a; --line: #e6e8eb; --soft: #f6f7f8;
+  --accent: #1f5fbf; --accent-soft: #eaf1fb;
+  --f-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --f-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --f-data: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--f-body); }
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+nav { border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; align-items: center; gap: 18px; height: 60px; }
+nav b { font-weight: 700; letter-spacing: -0.01em; }
+nav .sp { flex: 1; }
+nav a { text-decoration: none; color: var(--ink-2); font-size: 14.5px; font-weight: 500; }
+nav a:hover { color: var(--ink); }
+.hero { padding: 64px 0 40px; display: grid; gap: 18px; }
+.kicker { font-family: var(--f-data); font-size: 13px; color: var(--accent); }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(36px, 5.5vw, 60px); line-height: 1.05; letter-spacing: -0.02em; margin: 0; max-width: 18ch; text-wrap: balance; }
+.hero p { margin: 0; max-width: 62ch; color: var(--ink-2); font-size: 18px; }
+.facts { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 8px; }
+.facts div { display: grid; }
+.facts b { font-family: var(--f-data); font-weight: 500; font-size: 26px; letter-spacing: -0.03em; }
+.facts span { font-size: 13px; color: var(--ink-3); }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: 28px; margin: 0 0 18px; letter-spacing: -0.01em; }
+.projects { padding: 24px 0 40px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.card { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; background: #fff; transition: box-shadow .2s, transform .2s; }
+.card:hover { box-shadow: 0 10px 30px rgba(18, 20, 23, .08); transform: translateY(-2px); }
+.thumb { aspect-ratio: 16 / 8.5; max-width: 100%; background: var(--soft); border-bottom: 1px solid var(--line); overflow: hidden; display: block; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.body { padding: 18px 20px 20px; display: grid; gap: 10px; align-content: start; }
+.type { font-family: var(--f-data); font-size: 12px; color: var(--accent); }
+.card h3 { margin: 0; font-size: 20px; letter-spacing: -0.01em; line-height: 1.25; }
+.card p { margin: 0; color: var(--ink-2); font-size: 15px; }
+.result { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.result b { font-family: var(--f-data); font-weight: 500; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags span { font-size: 12px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); }
+.links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600; font-size: 14px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--line); }
+.btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary:hover { background: #2a2e33; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.live { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #15803d; font-weight: 600; }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #16a34a; }
+.skills { padding: 16px 0 56px; }
+.skillgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.skillgrid div { border-top: 2px solid var(--ink); padding-top: 10px; }
+.skillgrid b { display: block; margin-bottom: 4px; }
+.skillgrid span { color: var(--ink-2); font-size: 14.5px; }
+footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--ink-3); font-size: 13.5px; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .skillgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hero { padding-top: 44px; } }
+@media (max-width: 480px) { .skillgrid { grid-template-columns: 1fr; } nav .hide { display: none; } .facts { gap: 18px; } .facts b { font-size: 22px; } }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <b>madhubuddaraju</b><span class="sp"></span>
+  <a href="#projects">Projects</a><a class="hide" href="#skills">Skills</a>
+  <a href="https://github.com/madhubuddaraju">GitHub</a>
+</div></nav>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="kicker">Data engineering · Analytics · Machine learning</span>
+    <h1>Pipelines, models and dashboards built on real data.</h1>
+    <p>Each project below runs end to end: ingestion, SQL modeling, quality checks, analysis or ML, and a live dashboard you can open right now. Two of them refresh themselves every week from government data sources.</p>
+    <div class="facts">
+      <div><b>4</b><span>live dashboards</span></div>
+      <div><b>185k+</b><span>real records processed</span></div>
+      <div><b>2</b><span>auto-refreshing weekly</span></div>
+      <div><b>100%</b><span>CI-tested pipelines</span></div>
+    </div>
+  </section>
+
+  <section class="projects" id="projects">
+    <h2>Projects</h2>
+    <div class="grid">
+      <article class="card">
+        <a class="thumb" href="https://madhubuddaraju.github.io/respiratory-surveillance/"><img src="assets/surveillance.jpg" alt="Map of US states colored by influenza activity"></a>
+        <div class="body">
+          <span class="type">Public health surveillance · forecasting</span>
+          <h3>US Respiratory Disease Surveillance</h3>
+          <p>Weekly flu and COVID-19 hospital admissions for every state from CDC NHSN data, with outbreak detection and 1-4 week probabilistic forecasts.</p>
+          <div class="result">Forecasts cut error by <b>~40%</b> vs baseline (CDC's WIS metric); alerts lead state peaks by a median <b>7 weeks</b>.</div>
+          <div class="tags"><span>Python</span><span>DuckDB</span><span>SQL</span><span>LightGBM</span><span>GitHub Actions</span></div>
+          <span class="live">Updates every Friday</span>
+          <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/respiratory-surveillance/">Live dashboard →</a><a class="btn" href="https://github.com/madhubuddaraju/respiratory-surveillance">Code</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="thumb" href="https://madhubuddaraju.github.io/readmission-risk-ml/"><img src="assets/readmission.jpg" alt="ROC and precision-recall curves for four readmission models"></a>
+        <div class="body">
+          <span class="type">Machine learning · MLOps</span>
+          <h3>Hospital Readmission Risk Platform</h3>
+          <p>Predicts 30-day readmission for 99k diabetic encounters: PySpark features, MySQL warehouse, Spark MLlib vs LightGBM vs a PyTorch network, MLflow and a FastAPI service.</p>
+          <div class="result">Flagging the riskiest 20% catches <b>39%</b> of readmissions, a <b>2.0x</b> lift, with calibrated probabilities and fairness checks.</div>
+          <div class="tags"><span>PySpark</span><span>MySQL</span><span>LightGBM</span><span>PyTorch</span><span>MLflow</span><span>FastAPI</span><span>Docker</span></div>
+          <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/readmission-risk-ml/">Live dashboard →</a><a class="btn" href="https://github.com/madhubuddaraju/readmission-risk-ml">Code</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="thumb" href="https://madhubuddaraju.github.io/climate-emissions-tracker/"><img src="assets/climate.jpg" alt="Global temperature anomaly since 1850"></a>
+        <div class="body">
+          <span class="type">Data engineering · climate analytics</span>
+          <h3>Climate &amp; Emissions Tracker</h3>
+          <p>Combines NOAA/NASA temperature, Mauna Loa CO₂ and national emissions for 218 countries into one warehouse, re-baselined to pre-industrial levels.</p>
+          <div class="result">Warming of <b>+0.21 °C per decade</b> since 1975; <b>41 countries</b> grew GDP while cutting CO₂.</div>
+          <div class="tags"><span>Python</span><span>DuckDB</span><span>SQL</span><span>Data quality</span><span>GitHub Actions</span></div>
+          <span class="live">Updates every Monday</span>
+          <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/climate-emissions-tracker/">Live dashboard →</a><a class="btn" href="https://github.com/madhubuddaraju/climate-emissions-tracker">Code</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="thumb" href="https://madhubuddaraju.github.io/ecommerce-data-pipeline/"><img src="assets/ecommerce.jpg" alt="Monthly revenue split by new and returning customers"></a>
+        <div class="body">
+          <span class="type">Data engineering · business analytics</span>
+          <h3>E-commerce Data Pipeline</h3>
+          <p>Batch ELT from messy order exports into a star-schema warehouse, with 19 data quality checks and customer analytics (RFM, cohorts, channels).</p>
+          <div class="result">Every rejected row is audited; revenue reconciles across every layer. Synthetic data, realistic messiness.</div>
+          <div class="tags"><span>Python</span><span>DuckDB</span><span>SQL</span><span>Star schema</span><span>Streamlit</span></div>
+          <div class="links"><a class="btn primary" href="https://madhubuddaraju.github.io/ecommerce-data-pipeline/">Live dashboard →</a><a class="btn" href="https://github.com/madhubuddaraju/ecommerce-data-pipeline">Code</a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="skills" id="skills">
+    <h2>Skills used across these projects</h2>
+    <div class="skillgrid">
+      <div><b>Data engineering</b><span>ELT pipelines, PySpark, star schemas, DuckDB, MySQL, data quality checks, idempotent loads</span></div>
+      <div><b>Analytics</b><span>SQL window functions, cohort and RFM analysis, seasonal analysis, outbreak detection</span></div>
+      <div><b>Machine learning</b><span>LightGBM, PyTorch, Spark MLlib, quantile forecasting, calibration, SHAP, fairness evaluation</span></div>
+      <div><b>MLOps and delivery</b><span>MLflow, FastAPI, Docker, GitHub Actions CI, scheduled refreshes, static dashboards</span></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Built and hosted on GitHub Pages. Source for every project is on <a href="https://github.com/madhubuddaraju">GitHub</a>.</div></footer>
+</body>
+</html>
