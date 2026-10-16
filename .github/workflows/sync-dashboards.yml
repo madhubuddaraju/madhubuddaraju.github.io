@@ -31,8 +31,9 @@ jobs:
           # Pitstop's page imports its logic module (its data files are read from the repo directly)
           curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/pitstop/main/docs/core.js" -o core.js.new
           if grep -q "export function" core.js.new; then mv core.js.new pitstop/core.js; else rm core.js.new; fi
-          curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/pitstop/main/docs/icon.png" -o icon.png.new
-          if [ -s icon.png.new ]; then mv icon.png.new pitstop/icon.png; else rm -f icon.png.new; fi
+          for f in icon.png icon-192.png icon-512.png favicon-32.png manifest.webmanifest; do
+            if curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/pitstop/main/docs/$f" -o "$f.new" && [ -s "$f.new" ]; then mv "$f.new" "pitstop/$f"; else rm -f "$f.new"; fi
+          done
           # the drug label search also needs its browser index
           curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/drug-label-rag/main/docs/corpus.json" -o corpus.json.new
           if python3 -c "import json; json.load(open('corpus.json.new'))"; then mv corpus.json.new drug-label-rag/corpus.json; else rm corpus.json.new; fi
