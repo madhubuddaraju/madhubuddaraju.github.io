@@ -1,8 +1,6 @@
 # V R S Subbaraju Buddaraju
 
-Portfolio site linking to live dashboards for each project:
+Portfolio site: https://subbarajubuddaraju.github.io
 
-- [US Respiratory Disease Surveillance](https://subbarajubuddaraju.github.io/respiratory-surveillance/)
-- [Hospital Readmission Risk Platform](https://subbarajubuddaraju.github.io/readmission-risk-ml/)
-- [Climate & Emissions Tracker](https://subbarajubuddaraju.github.io/climate-emissions-tracker/)
-- [E-commerce Data Pipeline](https://subbarajubuddaraju.github.io/ecommerce-data-pipeline/)
+Each project has a live page and its own repository. The project pages here are copied from those repositories by
+`.github/workflows/sync-dashboards.yml`; the screenshots on the home page are in `img/`.

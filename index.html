@@ -3,271 +3,169 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>V R S Subbaraju Buddaraju: data and ML projects</title>
-<meta name="description" content="Nine data engineering, machine learning and NLP projects, each with a live page and public code.">
+<title>V R S Subbaraju Buddaraju</title>
+<meta name="description" content="Data engineering, machine learning and NLP projects by V R S Subbaraju Buddaraju, each with a live page and public code.">
+<meta property="og:title" content="V R S Subbaraju Buddaraju">
+<meta property="og:description" content="Data engineering, machine learning and NLP projects, each with a live page and public code.">
+<meta property="og:image" content="https://subbarajubuddaraju.github.io/img/pitstop.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Ctext x='32' y='42' font-family='Arial' font-size='28' font-weight='700' fill='%23fff' text-anchor='middle'%3ESB%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
 <style>
-/* Portfolio index: one column of project entries, each paired with a small chart of its own result. */
 :root {
-  color-scheme: light;
-  --paper: #ffffff;
-  --ink: #1c2230;
-  --graphite: #5d6472;
-  --faint: #8a909c;
-  --rule: #e2e4e9;
-  --cobalt: #3056d3;
-  --cobalt-wash: #e9eefc;
-  --font: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --paper: #FFFFFF; --ink: #000000; --body: #3D3D3D; --muted: #767676; --rule: #E7E7E7; --wash: #F4F4F2;
+  --sans: Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 * { box-sizing: border-box; }
-html { background: var(--paper); -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--font); }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--body); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; border-radius: 2px; }
-.page { max-width: 1080px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left)); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+.page { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
-header.top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 24px; padding: 26px 0 0; }
-.mark { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; text-decoration: none; white-space: nowrap; }
-header.top nav { margin-left: auto; display: flex; gap: 22px; font-size: 15px; }
-header.top nav a { color: var(--graphite); text-decoration: none; }
-header.top nav a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 28px 0; }
+header .name { color: var(--ink); font-weight: 600; text-decoration: none; }
+header nav { display: flex; gap: 22px; }
+header nav a { text-decoration: none; color: var(--muted); }
+header nav a:hover { color: var(--ink); }
 
-.intro { padding: 72px 0 56px; max-width: 820px; }
-.intro h1 { font-weight: 700; font-size: clamp(38px, 6.2vw, 68px); line-height: 1.02; letter-spacing: -0.035em; margin: 0 0 26px; text-wrap: balance; }
-.intro p { font-size: 19px; line-height: 1.6; color: var(--graphite); margin: 0; max-width: 60ch; }
+.intro { padding: 72px 0 88px; }
+.intro p:first-child { max-width: 24ch; }
+@media (max-width: 600px) { .intro { padding: 40px 0 56px; } .work { gap: 56px; } header nav { gap: 16px; } }
+.intro p { margin: 0; color: var(--ink); font-size: clamp(26px, 3.4vw, 38px); line-height: 1.22; font-weight: 400; letter-spacing: -.02em; }
+.intro p + p { margin-top: 18px; color: var(--muted); font-size: 17px; line-height: 1.5; letter-spacing: 0; max-width: 46ch; }
 
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 2px solid var(--ink); }
-.bar h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.015em; }
-.filter { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter button { font: inherit; font-size: 14.5px; color: var(--graphite); background: none; border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
-.filter button:hover { color: var(--ink); border-color: var(--faint); }
-.filter button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.filter button span { font-variant-numeric: tabular-nums; opacity: .7; margin-left: 4px; }
+.work { display: grid; gap: 72px 40px; padding-bottom: 96px; }
+@media (min-width: 860px) { .work { grid-template-columns: 1fr 1fr; } .work .wide { grid-column: 1 / -1; } }
+.project { margin: 0; }
+.shot { display: block; aspect-ratio: 16 / 10; background: var(--wash); border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--rule); }
+.shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
+.shot:hover img { transform: scale(1.012); }
+.project figcaption { padding-top: 18px; display: grid; grid-template-columns: 1fr auto; gap: 4px 20px; align-items: baseline; }
+.project h2 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; }
+.project h2 a { text-decoration: none; }
+.project h2 a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.project .links { display: flex; gap: 16px; font-size: 15px; }
+.project .links a { color: var(--muted); text-decoration: none; }
+.project .links a:hover { color: var(--ink); }
+.project p { grid-column: 1 / -1; margin: 0; max-width: 62ch; }
+.project .stack { grid-column: 1 / -1; color: var(--muted); font-size: 14px; margin-top: 6px; }
 
-.entry { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 56px; padding: 40px 0; border-bottom: 1px solid var(--rule); align-items: start; }
-.entry[hidden] { display: none; }
-.entry h3 { margin: 0 0 10px; font-size: 27px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
-.entry h3 a { text-decoration: none; }
-.entry h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
-.what { margin: 0 0 14px; max-width: 58ch; }
-.result { margin: 0 0 14px; max-width: 58ch; color: var(--graphite); }
-.result b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
-.stack { margin: 0 0 18px; font-size: 14.5px; color: var(--faint); max-width: 62ch; }
-.links { margin: 0; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; font-size: 15.5px; }
-.links a { font-weight: 600; text-underline-offset: 4px; }
-.links a.open { background: var(--cobalt); color: #fff; text-decoration: none; padding: 9px 16px; border-radius: 6px; }
-.links a.open:hover { background: #2447b8; }
-.links a:not(.open):hover { color: var(--cobalt); }
-.fresh { font-size: 14px; color: var(--graphite); }
-
-figure { margin: 6px 0 0; }
-figcaption { font-size: 13.5px; line-height: 1.45; color: var(--faint); margin-top: 8px; }
-svg.ev { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--font); font-variant-numeric: tabular-nums; }
-svg.ev .ln { fill: none; stroke: var(--cobalt); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
-svg.ev .ln.thin { stroke-width: 1.6; }
-svg.ev .base { stroke: var(--ink); stroke-width: 1; }
-svg.ev .ref { stroke: var(--faint); stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
-svg.ev .dot { fill: var(--cobalt); }
-svg.ev .bar { fill: var(--cobalt); opacity: .85; }
-svg.ev .bar.down { fill: #c4472b; opacity: .8; }
-svg.ev .v { font-size: 15px; font-weight: 700; fill: var(--ink); }
-svg.ev .l { font-size: 12px; fill: var(--faint); }
-
-.ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.ladder li { display: grid; grid-template-columns: minmax(0, 1fr) 46px; grid-template-areas: "step pct" "track pct"; column-gap: 12px; row-gap: 5px; align-items: center; }
-.ladder .step { grid-area: step; font-size: 14px; color: var(--graphite); }
-.ladder .track { grid-area: track; height: 8px; background: var(--cobalt-wash); border-radius: 4px; overflow: hidden; }
-.ladder .fill { display: block; height: 100%; background: var(--cobalt); border-radius: 4px; }
-.ladder .pct { grid-area: pct; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; align-self: end; }
-.ladder li:last-child .step { color: var(--ink); font-weight: 600; }
-
-.tools { padding: 64px 0 24px; }
-.tools h2 { margin: 0 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.015em; }
-.tools > p { margin: 0 0 22px; color: var(--graphite); }
-dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; }
-dl div { display: grid; grid-template-columns: minmax(0, 15ch) minmax(0, 1fr); gap: 16px; padding: 11px 0; border-top: 1px solid var(--rule); }
-dt { font-weight: 600; }
-dd { margin: 0; color: var(--graphite); }
-
-footer { padding: 40px 0 56px; color: var(--faint); font-size: 14.5px; }
-footer a { color: var(--graphite); text-underline-offset: 3px; }
-
-@media (max-width: 860px) {
-  .entry { grid-template-columns: minmax(0, 1fr); gap: 26px; }
-  figure { max-width: 460px; }
-  dl { grid-template-columns: minmax(0, 1fr); }
-  .intro { padding: 52px 0 40px; }
-}
-@media (max-width: 480px) {
-  body { font-size: 16px; }
-  .intro p { font-size: 17px; }
-  .entry h3 { font-size: 23px; }
-  dl div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-  header.top nav { gap: 16px; }
-}
+footer { border-top: 1px solid var(--rule); padding: 28px 0 48px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+footer a { color: var(--muted); }
+footer a:hover { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .shot img { transition: none; } }
 </style>
 </head>
 <body>
 <div class="page">
-  <header class="top">
-    <a class="mark" href="./">V R S Subbaraju Buddaraju</a>
-    <nav><a href="#projects">Projects</a><a href="#tools">Tools</a><a href="https://github.com/subbarajubuddaraju">GitHub</a></nav>
+  <header>
+    <a class="name" href="./">V R S Subbaraju Buddaraju</a>
+    <nav><a href="#work">Work</a><a href="https://github.com/subbarajubuddaraju">GitHub</a></nav>
   </header>
 
   <section class="intro">
-    <h1>I build data pipelines, models and the pages that show whether they work.</h1>
-    <p>Nine projects, each built end to end: getting the data, modeling it in SQL, testing its quality, analysis or machine learning, and a live page with the results. Eight use real public data, from live subway feeds and gas prices to Medicare and FDA records; one uses deliberately messy synthetic data. The code and the evaluation for every one are public.</p>
+    <p>I build data pipelines, models, and the pages that show whether they work.</p>
+    <p>Each project below goes end to end, from getting the data to a live page people can use. The code and the evaluation for every one are public.</p>
   </section>
 
-  <main id="projects">
-    <div class="bar">
-      <h2>Projects</h2>
-      <div class="filter" role="group" aria-label="Show projects by area">
-        <button type="button" aria-pressed="true" data-f="all">All<span>9</span></button>
-        <button type="button" aria-pressed="false" data-f="de">Data engineering<span>6</span></button>
-        <button type="button" aria-pressed="false" data-f="ml">Machine learning<span>2</span></button>
-        <button type="button" aria-pressed="false" data-f="nlp">NLP and LLMs<span>2</span></button>
-      </div>
-    </div>
-    
-    <article class="entry" id="drug-label-rag" data-tags="nlp">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/drug-label-rag/">Ask the Drug Label</a></h3>
-        <p class="what">Ask a question about a prescription drug and get the passages from its FDA label that answer it, with an open-source language model that cites them or says it can't answer.</p>
-        <p class="result">Finds the right label section for <b>97%</b> of test questions written after tuning was finished. A two-stage check refuses <b>97%</b> of questions the labels can't answer.</p>
-        <p class="stack">Python, BM25, sentence embeddings, Qwen2.5 on CPU, NLI grading, transformers.js</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/drug-label-rag/">Try it</a><a href="https://github.com/subbarajubuddaraju/drug-label-rag">Source code</a></p>
-      </div>
-      <figure>
-        <ol class="ladder" aria-label="Questions answered in the top 5 results, as each change was added"><li><span class="step">Keyword search</span><span class="track"><span class="fill" style="width:35.2%"></span></span><span class="pct">35%</span></li><li><span class="step">+ drug names in each passage</span><span class="track"><span class="fill" style="width:60.0%"></span></span><span class="pct">60%</span></li><li><span class="step">+ search only the named drug</span><span class="track"><span class="fill" style="width:68.1%"></span></span><span class="pct">68%</span></li><li><span class="step">+ semantic search and section hints</span><span class="track"><span class="fill" style="width:98.0%"></span></span><span class="pct">98%</span></li></ol>
-        <figcaption>Questions with the right passage in the top 5, as each change was added. 690 labeled questions.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="nyc-subway-live" data-tags="de">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/nyc-subway-live/">Subway Line Watch</a></h3>
-        <p class="what">Spots NYC subway delays as they form: every train's live position goes through Kafka and Spark Structured Streaming, which flags service gaps and bunched trains platform by platform.</p>
-        <p class="result"><b>2,152</b> train intervals measured across 25 lines in the first 20-minute session, <b>81%</b> within the schedule standard. Gap alerts go out before the late train arrives.</p>
-        <p class="stack">Apache Kafka, Spark Structured Streaming (stateful, watermarks, timeouts), GTFS-realtime, Docker</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/nyc-subway-live/">Open the live board</a><a href="https://github.com/subbarajubuddaraju/nyc-subway-live">Source code</a><span class="fresh">Streams every hour</span></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Share of train intervals within 25 percent of schedule, by line" class="ev"><rect x="8.5" y="42.0" width="8.8" height="86.0" class="bar"/><text x="12.9" y="144" class="l" text-anchor="middle">1</text><rect x="22.3" y="51.6" width="8.8" height="76.4" class="bar"/><text x="26.7" y="144" class="l" text-anchor="middle">2</text><rect x="36.1" y="45.9" width="8.8" height="82.1" class="bar"/><text x="40.5" y="144" class="l" text-anchor="middle">3</text><rect x="49.9" y="85.8" width="8.8" height="42.2" class="bar down"/><text x="54.3" y="144" class="l" text-anchor="middle">4</text><rect x="63.7" y="66.4" width="8.8" height="61.6" class="bar"/><text x="68.1" y="144" class="l" text-anchor="middle">5</text><rect x="77.5" y="87.2" width="8.8" height="40.8" class="bar down"/><text x="82.0" y="144" class="l" text-anchor="middle">6</text><rect x="91.3" y="92.4" width="8.8" height="35.6" class="bar down"/><text x="95.8" y="144" class="l" text-anchor="middle">7</text><rect x="105.2" y="52.5" width="8.8" height="75.5" class="bar"/><text x="109.6" y="144" class="l" text-anchor="middle">A</text><rect x="119.0" y="62.8" width="8.8" height="65.2" class="bar"/><text x="123.4" y="144" class="l" text-anchor="middle">C</text><rect x="132.8" y="49.3" width="8.8" height="78.7" class="bar"/><text x="137.2" y="144" class="l" text-anchor="middle">E</text><rect x="146.6" y="57.8" width="8.8" height="70.2" class="bar"/><text x="151.0" y="144" class="l" text-anchor="middle">B</text><rect x="160.4" y="45.9" width="8.8" height="82.1" class="bar"/><text x="164.8" y="144" class="l" text-anchor="middle">D</text><rect x="174.2" y="65.8" width="8.8" height="62.2" class="bar"/><text x="178.6" y="144" class="l" text-anchor="middle">F</text><rect x="188.0" y="74.9" width="8.8" height="53.1" class="bar down"/><text x="192.4" y="144" class="l" text-anchor="middle">M</text><rect x="201.8" y="67.1" width="8.8" height="60.9" class="bar"/><text x="206.2" y="144" class="l" text-anchor="middle">G</text><rect x="215.6" y="32.0" width="8.8" height="96.0" class="bar"/><text x="220.0" y="144" class="l" text-anchor="middle">J</text><rect x="229.4" y="41.4" width="8.8" height="86.6" class="bar"/><text x="233.9" y="144" class="l" text-anchor="middle">L</text><rect x="243.2" y="46.1" width="8.8" height="81.9" class="bar"/><text x="247.7" y="144" class="l" text-anchor="middle">N</text><rect x="257.1" y="20.6" width="8.8" height="107.4" class="bar"/><text x="261.5" y="144" class="l" text-anchor="middle">Q</text><rect x="270.9" y="41.4" width="8.8" height="86.6" class="bar"/><text x="275.3" y="144" class="l" text-anchor="middle">R</text><rect x="284.7" y="27.5" width="8.8" height="100.5" class="bar"/><text x="289.1" y="144" class="l" text-anchor="middle">W</text><line x1="6" x2="296" y1="71.0" y2="71.0" class="ref"/><text x="304.0" y="75.0" class="l">75% target</text><text x="304.0" y="20.0" class="l">100%</text><text x="304.0" y="128.0" class="l">50%</text></svg>
-        <figcaption>Share of intervals within 25% of schedule by line, first live session (2,152 intervals, 20 minutes).</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="pitstop" data-tags="de">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/pitstop/">Pitstop</a></h3>
-        <p class="what">A phone page for when you're somewhere new: tap Gas or Food. It lists restaurants open near you with closing times and NYC health grades, explains unfamiliar dishes, and shows nearby stations with this week's local gas price.</p>
-        <p class="result"><b>171</b> dishes across <b>43</b> cuisines, each with ingredients and how it's made, matched from <b>160</b> OpenStreetMap cuisine tags. Gas prices refresh weekly for <b>29</b> US areas.</p>
-        <p class="stack">JavaScript, OpenStreetMap Overpass, opening-hours parsing, EIA and NYC Open Data, Python, GitHub Actions</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/pitstop/">Open on your phone</a><a href="https://github.com/subbarajubuddaraju/pitstop">Source code</a><span class="fresh">Prices refresh every Tuesday</span></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Average regular gas price this week in ten US metro areas" class="ev"><rect x="11.2" y="58.3" width="18.6" height="69.7" class="bar"/><text x="20.5" y="144" class="l" text-anchor="middle">HOU</text><rect x="40.2" y="56.7" width="18.6" height="71.3" class="bar"/><text x="49.5" y="144" class="l" text-anchor="middle">CLE</text><rect x="69.2" y="52.6" width="18.6" height="75.4" class="bar"/><text x="78.5" y="144" class="l" text-anchor="middle">MIA</text><rect x="98.2" y="51.1" width="18.6" height="76.9" class="bar"/><text x="107.5" y="144" class="l" text-anchor="middle">DEN</text><rect x="127.2" y="48.3" width="18.6" height="79.7" class="bar"/><text x="136.5" y="144" class="l" text-anchor="middle">BOS</text><rect x="156.2" y="48.1" width="18.6" height="79.9" class="bar"/><text x="165.5" y="144" class="l" text-anchor="middle">NYC</text><rect x="185.2" y="41.0" width="18.6" height="87.0" class="bar down"/><text x="194.5" y="144" class="l" text-anchor="middle">CHI</text><rect x="214.2" y="24.2" width="18.6" height="103.8" class="bar down"/><text x="223.5" y="144" class="l" text-anchor="middle">SEA</text><rect x="243.2" y="15.3" width="18.6" height="112.7" class="bar down"/><text x="252.5" y="144" class="l" text-anchor="middle">LA</text><rect x="272.2" y="14.0" width="18.6" height="114.0" class="bar down"/><text x="281.5" y="144" class="l" text-anchor="middle">SF</text><line x1="6" x2="296" y1="47.8" y2="47.8" class="ref"/><text x="304.0" y="51.8" class="v">$4.33</text><text x="304.0" y="65.8" class="l">US average</text></svg>
-        <figcaption>Regular gas per gallon in the ten EIA metro areas, week of 10/12. Red is above the US average. The page shows the one nearest you.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="hospital-quality-warehouse" data-tags="de">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/hospital-quality-warehouse/">Hospital Quality Warehouse</a></h3>
-        <p class="what">Helps people choose a hospital: enter a ZIP code and a reason for care, and see nearby hospitals ranked on the Medicare measures that matter for it. Built as a tested dbt warehouse run by Dagster.</p>
-        <p class="result"><b>5,419</b> hospitals, 30 measures, and rating history rebuilt from <b>25</b> past releases through a dbt snapshot. A watch list flags <b>182</b> hospitals.</p>
-        <p class="stack">dbt (contracts, unit tests, snapshots), Dagster, DuckDB, SQL, CMS and Census APIs</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/hospital-quality-warehouse/">Find a hospital</a><a href="https://github.com/subbarajubuddaraju/hospital-quality-warehouse">Source code</a><span class="fresh">Refreshes every Monday</span></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Hospitals whose star rating went up or down at each annual Medicare update" class="ev"><rect x="16.6" y="14.0" width="27.1" height="57.0" class="bar"/><rect x="16.6" y="71.0" width="27.1" height="49.4" class="bar down"/><text x="30.2" y="146" class="l" text-anchor="middle">2021</text><rect x="65.0" y="41.1" width="27.1" height="29.9" class="bar"/><rect x="65.0" y="71.0" width="27.1" height="36.3" class="bar down"/><text x="78.5" y="146" class="l" text-anchor="middle">2022</text><rect x="113.3" y="30.7" width="27.1" height="40.3" class="bar"/><rect x="113.3" y="71.0" width="27.1" height="45.7" class="bar down"/><text x="126.8" y="146" class="l" text-anchor="middle">2023</text><rect x="161.6" y="36.5" width="27.1" height="34.5" class="bar"/><rect x="161.6" y="71.0" width="27.1" height="44.0" class="bar down"/><text x="175.2" y="146" class="l" text-anchor="middle">2024</text><rect x="210.0" y="39.9" width="27.1" height="31.1" class="bar"/><rect x="210.0" y="71.0" width="27.1" height="40.3" class="bar down"/><text x="223.5" y="146" class="l" text-anchor="middle">2025</text><rect x="258.3" y="24.3" width="27.1" height="46.7" class="bar"/><rect x="258.3" y="71.0" width="27.1" height="29.2" class="bar down"/><text x="271.8" y="146" class="l" text-anchor="middle">2026</text><line x1="6" x2="296" y1="71.0" y2="71.0" class="base"/><text x="304.0" y="47.0" class="v">+812</text><text x="304.0" y="61.0" class="l">up in 2026</text><text x="304.0" y="91.0" class="v">−509</text><text x="304.0" y="105.0" class="l">down</text></svg>
-        <figcaption>Hospitals whose star rating went up (above) or down (below) at each annual update, 25 releases replayed.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="consumer-complaints-nlp" data-tags="nlp">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/consumer-complaints-nlp/">Consumer Complaint Intelligence</a></h3>
-        <p class="what">Reads 53,000 complaints filed with the Consumer Financial Protection Bureau: routes each one to a product, finds form letters, tracks rising issues and flags urgent harm.</p>
-        <p class="result">Routes <b>42%</b> of complaints automatically at <b>93%</b> accuracy. A tuned keyword model beat fine-tuned DistilBERT, and runs in the browser from a 4 MB file.</p>
-        <p class="stack">Python, scikit-learn, DistilBERT, topic modeling, JavaScript</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/consumer-complaints-nlp/">Try it</a><a href="https://github.com/subbarajubuddaraju/consumer-complaints-nlp">Source code</a></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Share of complaints that are near-copies of form letters, by month" class="ev"><line x1="6" x2="296" y1="128.0" y2="128.0" class="base"/><path d="M6.0,46.6 L18.6,58.2 L31.2,47.2 L43.8,52.6 L56.4,54.7 L69.0,50.5 L81.7,47.0 L94.3,48.6 L106.9,58.1 L119.5,55.3 L132.1,55.4 L144.7,55.9 L157.3,52.9 L169.9,47.3 L182.5,55.8 L195.1,58.4 L207.7,64.4 L220.3,60.9 L233.0,67.7 L245.6,69.8 L258.2,71.9 L270.8,68.5 L283.4,62.6 L296.0,72.7" class="ln"/><circle cx="6.0" cy="46.6" r="3.2" class="dot"/><text x="12.0" y="38.6" class="v">43%</text><circle cx="296.0" cy="72.7" r="3.2" class="dot"/><text x="304.0" y="76.7" class="v">29%</text><text x="304.0" y="90.7" class="l">copies</text><text x="6.0" y="144" class="l">2022</text><text x="296.0" y="144" class="l" text-anchor="end">2024</text></svg>
-        <figcaption>Share of complaint narratives that are near-copies of a form letter, by month.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="readmission-risk-ml" data-tags="ml">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/readmission-risk-ml/">Hospital Readmission Risk</a></h3>
-        <p class="what">Predicts which diabetic patients will be back in hospital within 30 days, so a care team with limited time calls the right people first.</p>
-        <p class="result">Flagging the riskiest <b>20%</b> of discharges catches <b>39%</b> of readmissions, twice what random selection would, with calibrated probabilities and checks by age, sex and race.</p>
-        <p class="stack">PySpark, MySQL, LightGBM, PyTorch, MLflow, FastAPI, Docker</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/readmission-risk-ml/">Open the results</a><a href="https://github.com/subbarajubuddaraju/readmission-risk-ml">Source code</a></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Share of readmissions caught versus share of patients flagged" class="ev"><line x1="6.0" y1="128.0" x2="296.0" y2="42.5" class="ref"/><text x="304.0" y="46.5" class="l">random</text><line x1="6" x2="296" y1="128.0" y2="128.0" class="base"/><path d="M6.0,128.0 L10.8,122.4 L15.7,118.0 L20.5,113.9 L25.3,109.7 L30.2,106.5 L35.0,103.9 L39.8,101.0 L44.7,98.4 L49.5,95.8 L54.3,93.5 L59.2,91.8 L64.0,89.0 L68.8,85.7 L73.7,84.1 L78.5,81.4 L83.3,79.5 L88.2,77.6 L93.0,75.2 L97.8,73.4 L102.7,71.8 L107.5,70.0 L112.3,68.5 L117.2,66.1 L122.0,64.0 L126.8,62.2 L131.7,60.2 L136.5,58.6 L141.3,57.0 L146.2,55.5 L151.0,53.8 L155.8,52.6 L160.7,50.9 L165.5,49.1 L170.3,47.1 L175.2,45.9 L180.0,44.3 L184.8,43.0 L189.7,41.7 L194.5,40.4 L199.3,39.1 L204.2,37.8 L209.0,36.8 L213.8,35.7 L218.7,34.4 L223.5,32.8 L228.3,31.4 L233.2,30.3 L238.0,28.3 L242.8,27.2 L247.7,25.7 L252.5,24.8 L257.3,23.8 L262.2,22.8 L267.0,21.8 L271.8,21.3 L276.7,20.4 L281.5,19.2 L286.3,18.2 L291.2,16.8 L296.0,15.6" class="ln"/><line x1="102.7" x2="102.7" y1="128.0" y2="71.8" class="ref"/><circle cx="102.7" cy="71.8" r="3.2" class="dot"/><text x="94.7" y="63.8" class="v" text-anchor="end">39%</text><text x="304.0" y="19.6" class="l">model</text><text x="102.7" y="144" class="l" text-anchor="middle">20% flagged</text></svg>
-        <figcaption>Readmissions caught (up) against the share of patients flagged (across), test patients.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="respiratory-surveillance" data-tags="de ml">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/respiratory-surveillance/">Respiratory Disease Surveillance</a></h3>
-        <p class="what">Weekly flu and COVID-19 hospital admissions for every US state from CDC data, with outbreak alerts and one-to-four-week forecasts.</p>
-        <p class="result">Forecasts cut error by about <b>40%</b> against a naive baseline; alerts fired a median <b>7 weeks</b> before each state's peak.</p>
-        <p class="stack">Python, DuckDB, SQL, LightGBM quantile models, GitHub Actions</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/respiratory-surveillance/">Open the dashboard</a><a href="https://github.com/subbarajubuddaraju/respiratory-surveillance">Source code</a><span class="fresh">Refreshes every Friday</span></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Weekly US flu hospital admissions since 2022" class="ev"><line x1="6" x2="296" y1="128.0" y2="128.0" class="base"/><path d="M6.0,125.8 L7.2,125.6 L8.4,124.9 L9.6,124.7 L10.8,124.3 L11.9,123.7 L13.1,122.6 L14.3,122.1 L15.5,121.8 L16.7,121.6 L17.9,121.2 L19.1,120.9 L20.3,121.5 L21.5,121.5 L22.6,121.6 L23.8,121.6 L25.0,122.4 L26.2,122.5 L27.4,123.5 L28.6,124.4 L29.8,125.2 L31.0,125.8 L32.1,126.4 L33.3,126.4 L34.5,126.7 L35.7,126.9 L36.9,127.0 L38.1,127.0 L39.3,127.0 L40.5,127.0 L41.7,126.9 L42.8,126.8 L44.0,126.6 L45.2,126.4 L46.4,126.1 L47.6,125.3 L48.8,124.6 L50.0,123.3 L51.2,119.4 L52.4,114.9 L53.5,110.4 L54.7,105.6 L55.9,90.8 L57.1,73.0 L58.3,78.8 L59.5,83.8 L60.7,87.8 L61.9,88.1 L63.0,99.2 L64.2,113.3 L65.4,118.8 L66.6,121.7 L67.8,122.7 L69.0,123.5 L70.2,124.1 L71.4,124.6 L72.6,124.9 L73.7,125.2 L74.9,125.1 L76.1,125.3 L77.3,125.4 L78.5,125.5 L79.7,125.8 L80.9,126.0 L82.1,126.1 L83.3,126.0 L84.4,126.0 L85.6,125.7 L86.8,126.0 L88.0,126.1 L89.2,126.1 L90.4,126.2 L91.6,126.3 L92.8,126.3 L94.0,126.6 L95.1,126.5 L96.3,126.7 L97.5,126.4 L98.7,126.6 L99.9,126.6 L101.1,126.5 L102.3,126.4 L103.5,126.2 L104.6,126.4 L105.8,126.3 L107.0,126.2 L108.2,125.9 L109.4,125.7 L110.6,125.5 L111.8,125.0 L113.0,124.7 L114.2,123.9 L115.3,122.3 L116.5,120.8 L117.7,119.0 L118.9,115.8 L120.1,112.7 L121.3,106.9 L122.5,95.8 L123.7,83.5 L124.9,88.0 L126.0,95.4 L127.2,100.7 L128.4,101.4 L129.6,103.5 L130.8,104.2 L132.0,105.2 L133.2,105.7 L134.4,105.9 L135.5,108.7 L136.7,113.0 L137.9,115.6 L139.1,116.6 L140.3,117.6 L141.5,119.7 L142.7,122.0 L143.9,123.0 L145.1,125.0 L146.2,126.3 L147.4,126.6 L148.6,126.7 L149.8,126.8 L151.0,127.0 L152.2,126.9 L153.4,127.1 L154.6,127.3 L155.8,127.3 L156.9,127.2 L158.1,127.3 L159.3,127.4 L160.5,127.4 L161.7,127.4 L162.9,127.4 L164.1,127.4 L165.3,127.5 L166.5,127.5 L167.6,127.3 L168.8,127.4 L170.0,127.5 L171.2,127.4 L172.4,127.4 L173.6,126.9 L174.8,125.8 L176.0,125.9 L177.1,123.5 L178.3,122.6 L179.5,121.3 L180.7,118.9 L181.9,114.6 L183.1,108.3 L184.3,94.9 L185.5,69.2 L186.7,46.7 L187.8,62.7 L189.0,58.9 L190.2,43.0 L191.4,20.2 L192.6,14.0 L193.8,29.9 L195.0,47.3 L196.2,62.5 L197.4,77.4 L198.5,89.3 L199.7,99.2 L200.9,107.6 L202.1,113.7 L203.3,117.6 L204.5,119.9 L205.7,121.2 L206.9,122.8 L208.0,123.5 L209.2,124.1 L210.4,124.4 L211.6,124.2 L212.8,124.9 L214.0,124.9 L215.2,125.2 L216.4,125.6 L217.6,125.9 L218.7,126.0 L219.9,126.2 L221.1,126.2 L222.3,126.4 L223.5,126.4 L224.7,126.4 L225.9,126.4 L227.1,126.1 L228.3,126.0 L229.4,125.9 L230.6,126.1 L231.8,125.9 L233.0,126.0 L234.2,125.9 L235.4,125.7 L236.6,125.5 L237.8,125.2 L239.0,124.3 L240.1,122.9 L241.3,120.7 L242.5,117.3 L243.7,112.7 L244.9,105.1 L246.1,84.8 L247.3,51.0 L248.5,40.8 L249.6,66.6 L250.8,87.5 L252.0,93.5 L253.2,95.7 L254.4,94.9 L255.6,94.2 L256.8,97.8 L258.0,105.1 L259.2,108.3 L260.3,112.0 L261.5,115.5 L262.7,121.1 L263.9,122.0 L265.1,123.4 L266.3,124.0 L267.5,124.1 L268.7,124.6 L269.9,125.0 L271.0,125.3 L272.2,125.4 L273.4,125.8 L274.6,125.9 L275.8,126.2 L277.0,126.4 L278.2,126.5 L279.4,126.5 L280.5,126.5 L281.7,126.6 L282.9,126.6 L284.1,126.7 L285.3,126.7 L286.5,126.6 L287.7,126.2 L288.9,126.1 L290.1,125.4 L291.2,124.8 L292.4,123.8 L293.6,122.5 L294.8,121.0 L296.0,120.1" class="ln"/><circle cx="296.0" cy="120.1" r="3.2" class="dot"/><text x="304.0" y="124.1" class="v">3,835</text><text x="304.0" y="138.1" class="l">this week</text><text x="6.0" y="144" class="l">2022</text><text x="296.0" y="144" class="l" text-anchor="end">2026</text></svg>
-        <figcaption>US flu hospital admissions per week, 2022 to now. Peak 55,544.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="climate-emissions-tracker" data-tags="de">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/climate-emissions-tracker/">Climate and Emissions Tracker</a></h3>
-        <p class="what">Combines NOAA and NASA temperature records, Mauna Loa CO₂ and emissions for 218 countries in one warehouse, rebuilt every week.</p>
-        <p class="result">Warming of <b>0.21 °C per decade</b> since 1975, and <b>41 countries</b> that grew their economy while cutting CO₂.</p>
-        <p class="stack">Python, DuckDB, SQL, data quality checks, GitHub Actions</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/climate-emissions-tracker/">Open the dashboard</a><a href="https://github.com/subbarajubuddaraju/climate-emissions-tracker">Source code</a><span class="fresh">Refreshes every Monday</span></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Global temperature anomaly since 1850" class="ev"><line x1="6" x2="296" y1="113.1" y2="113.1" class="base"/><line x1="6" x2="296" y1="20.2" y2="20.2" class="ref"/><text x="6" y="15.2" class="l">1.5 °C</text><path d="M6.0,117.4 L7.7,107.3 L9.3,104.9 L11.0,107.2 L12.6,109.2 L14.3,109.0 L15.9,111.3 L17.6,119.8 L19.3,115.5 L20.9,109.1 L22.6,116.2 L24.2,119.7 L25.9,125.3 L27.5,114.7 L29.2,121.6 L30.9,115.3 L32.5,115.8 L34.2,115.7 L35.8,113.5 L37.5,110.7 L39.1,111.3 L40.8,114.1 L42.5,110.2 L44.1,110.9 L45.8,113.6 L47.4,113.7 L49.1,116.4 L50.7,96.1 L52.4,90.3 L54.1,108.9 L55.7,109.8 L57.4,104.2 L59.0,107.9 L60.7,111.3 L62.3,120.4 L64.0,119.4 L65.7,116.3 L67.3,121.2 L69.0,114.1 L70.6,106.5 L72.3,122.0 L73.9,115.6 L75.6,122.4 L77.3,121.7 L78.9,120.6 L80.6,118.3 L82.2,108.2 L83.9,106.7 L85.5,120.4 L87.2,112.3 L88.9,105.3 L90.5,108.8 L92.2,118.1 L93.8,124.2 L95.5,128.0 L97.1,116.2 L98.8,110.5 L100.5,121.9 L102.1,122.4 L103.8,124.0 L105.4,123.4 L107.1,124.4 L108.7,120.5 L110.4,119.7 L112.1,107.1 L113.7,102.8 L115.4,117.0 L117.0,124.7 L118.7,117.4 L120.3,111.6 L122.0,109.8 L123.7,105.9 L125.3,112.0 L127.0,110.5 L128.6,110.1 L130.3,108.3 L131.9,98.6 L133.6,105.0 L135.3,103.9 L136.9,115.2 L138.6,101.5 L140.2,97.5 L141.9,100.3 L143.5,111.3 L145.2,102.0 L146.9,104.1 L148.5,101.6 L150.2,92.0 L151.8,91.8 L153.5,93.6 L155.1,86.4 L156.8,88.8 L158.5,91.0 L160.1,90.6 L161.8,82.0 L163.4,88.3 L165.1,98.6 L166.7,97.0 L168.4,99.0 L170.1,100.5 L171.7,105.8 L173.4,95.4 L175.0,90.3 L176.7,86.2 L178.3,98.3 L180.0,103.3 L181.7,107.4 L183.3,93.2 L185.0,92.0 L186.6,93.9 L188.3,98.0 L189.9,91.9 L191.6,94.6 L193.3,92.9 L194.9,109.7 L196.6,103.5 L198.2,100.0 L199.9,98.1 L201.5,101.2 L203.2,92.7 L204.9,96.2 L206.5,103.7 L208.2,96.6 L209.8,87.7 L211.5,101.4 L213.1,97.6 L214.8,104.0 L216.5,84.4 L218.1,90.6 L219.8,85.5 L221.4,79.1 L223.1,75.7 L224.7,89.1 L226.4,77.3 L228.1,88.2 L229.7,88.2 L231.4,85.2 L233.0,76.2 L234.7,73.8 L236.3,80.2 L238.0,69.0 L239.7,70.3 L241.3,83.6 L243.0,81.0 L244.6,76.9 L246.3,68.0 L247.9,74.2 L249.6,65.3 L251.3,55.6 L252.9,71.3 L254.6,70.8 L256.2,61.0 L257.9,57.7 L259.5,57.6 L261.2,62.3 L262.9,53.7 L264.5,55.9 L266.2,54.7 L267.8,62.5 L269.5,54.5 L271.1,49.3 L272.8,58.0 L274.5,55.6 L276.1,52.7 L277.8,49.6 L279.4,40.3 L281.1,33.7 L282.7,39.2 L284.4,44.3 L286.1,36.0 L287.7,34.2 L289.4,43.4 L291.0,41.3 L292.7,22.2 L294.3,18.6 L296.0,26.1" class="ln thin"/><circle cx="296.0" cy="26.1" r="3.2" class="dot"/><text x="304.0" y="30.1" class="v">+1.41 °C</text><text x="304.0" y="44.1" class="l">2025</text><text x="6.0" y="144" class="l">1850</text><text x="296.0" y="144" class="l" text-anchor="end">2025</text></svg>
-        <figcaption>Global surface temperature against the 1850–1900 average, one point per year.</figcaption>
-      </figure>
-    </article>
-    <article class="entry" id="ecommerce-data-pipeline" data-tags="de">
-      <div class="txt">
-        <h3><a href="https://subbarajubuddaraju.github.io/ecommerce-data-pipeline/">E-commerce Data Pipeline</a></h3>
-        <p class="what">Turns messy order exports into a star-schema warehouse, then answers the questions a shop owner asks: who buys again, which channels pay off, which products sell.</p>
-        <p class="result"><b>19</b> quality checks on every run. Each rejected row is logged with its reason, and revenue reconciles at every layer. Built on deliberately messy synthetic data.</p>
-        <p class="stack">Python, DuckDB, SQL, star schema, cohort and RFM analysis</p>
-        <p class="links"><a class="open" href="https://subbarajubuddaraju.github.io/ecommerce-data-pipeline/">Open the dashboard</a><a href="https://github.com/subbarajubuddaraju/ecommerce-data-pipeline">Source code</a></p>
-      </div>
-      <figure>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Monthly revenue in the synthetic e-commerce warehouse" class="ev"><rect x="7.0" y="126.0" width="10.1" height="2.0" class="bar"/><rect x="19.1" y="125.7" width="10.1" height="2.3" class="bar"/><rect x="31.2" y="123.4" width="10.1" height="4.6" class="bar"/><rect x="43.2" y="121.9" width="10.1" height="6.1" class="bar"/><rect x="55.3" y="118.3" width="10.1" height="9.7" class="bar"/><rect x="67.4" y="118.7" width="10.1" height="9.3" class="bar"/><rect x="79.5" y="116.2" width="10.1" height="11.8" class="bar"/><rect x="91.6" y="114.6" width="10.1" height="13.4" class="bar"/><rect x="103.7" y="114.0" width="10.1" height="14.0" class="bar"/><rect x="115.8" y="110.1" width="10.1" height="17.9" class="bar"/><rect x="127.8" y="102.4" width="10.1" height="25.6" class="bar"/><rect x="139.9" y="99.0" width="10.1" height="29.0" class="bar"/><rect x="152.0" y="104.5" width="10.1" height="23.5" class="bar"/><rect x="164.1" y="104.7" width="10.1" height="23.3" class="bar"/><rect x="176.2" y="99.2" width="10.1" height="28.8" class="bar"/><rect x="188.2" y="100.9" width="10.1" height="27.1" class="bar"/><rect x="200.3" y="94.8" width="10.1" height="33.2" class="bar"/><rect x="212.4" y="93.9" width="10.1" height="34.1" class="bar"/><rect x="224.5" y="88.4" width="10.1" height="39.6" class="bar"/><rect x="236.6" y="82.2" width="10.1" height="45.8" class="bar"/><rect x="248.7" y="77.9" width="10.1" height="50.1" class="bar"/><rect x="260.8" y="70.3" width="10.1" height="57.7" class="bar"/><rect x="272.8" y="35.8" width="10.1" height="92.2" class="bar"/><rect x="284.9" y="14.0" width="10.1" height="114.0" class="bar"/><line x1="6" x2="296" y1="128.0" y2="128.0" class="base"/><text x="304.0" y="18.0" class="v">$1.8M</text><text x="304.0" y="32.0" class="l">last month</text><text x="6.0" y="144" class="l">2024</text><text x="296.0" y="144" class="l" text-anchor="end">2025</text></svg>
-        <figcaption>Monthly revenue after cleaning; 268 of 45,450 order rows rejected and audited.</figcaption>
-      </figure>
-    </article>
+  <main class="work" id="work">
+    <figure class="project wide">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/pitstop/"><img src="img/pitstop.webp" width="1600" height="1000" alt="Pitstop on a phone: the start screen with this week's gas prices, a list of restaurants open near Times Square, and a restaurant page with its menu"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/pitstop/">Pitstop</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/pitstop/">Open</a><a href="https://github.com/subbarajubuddaraju/pitstop">Code</a></span>
+        <p>A phone app for when you're somewhere new: what's open near you and when it closes, what to order there, and this week's gas price.</p>
+        <span class="stack">JavaScript, three.js, OpenStreetMap, EIA and NYC Open Data, GitHub Actions</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/nyc-subway-live/"><img src="img/nyc-subway-live.webp" width="1600" height="1000" loading="lazy" alt="Subway Line Watch board showing each NYC line's on-schedule share and delays"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/nyc-subway-live/">Subway Line Watch</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/nyc-subway-live/">Open</a><a href="https://github.com/subbarajubuddaraju/nyc-subway-live">Code</a></span>
+        <p>Spots NYC subway delays as they form, from every train's live position streamed through Kafka and Spark.</p>
+        <span class="stack">Kafka, Spark Structured Streaming, GTFS-realtime, Docker</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/drug-label-rag/"><img src="img/drug-label-rag.webp" width="1600" height="1000" loading="lazy" alt="Ask the FDA label: a question about metronidazole and alcohol answered with the matching label passage highlighted"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/drug-label-rag/">Ask the Drug Label</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/drug-label-rag/">Open</a><a href="https://github.com/subbarajubuddaraju/drug-label-rag">Code</a></span>
+        <p>Answers questions about prescription drugs from their FDA labels, citing the passage, or says when the label doesn't cover it.</p>
+        <span class="stack">Python, BM25, sentence embeddings, Qwen2.5, NLI grading, transformers.js</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/hospital-quality-warehouse/"><img src="img/hospital-quality-warehouse.webp" width="1600" height="1000" loading="lazy" alt="Hospital Quality Check ranking hospitals near ZIP 10001 for a general hospital stay"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/hospital-quality-warehouse/">Hospital Quality Check</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/hospital-quality-warehouse/">Open</a><a href="https://github.com/subbarajubuddaraju/hospital-quality-warehouse">Code</a></span>
+        <p>Ranks nearby hospitals on the Medicare measures that matter for your reason for care, from a tested dbt warehouse.</p>
+        <span class="stack">dbt, Dagster, DuckDB, SQL, CMS and Census APIs</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/consumer-complaints-nlp/"><img src="img/consumer-complaints-nlp.webp" width="1600" height="1000" loading="lazy" alt="The Complaint Desk: findings from 53,000 consumer complaints and a live complaint router"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/consumer-complaints-nlp/">The Complaint Desk</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/consumer-complaints-nlp/">Open</a><a href="https://github.com/subbarajubuddaraju/consumer-complaints-nlp">Code</a></span>
+        <p>Reads 53,000 complaints about US lenders: routes each to a product, finds form letters and flags urgent harm.</p>
+        <span class="stack">Python, scikit-learn, DistilBERT, topic modeling, JavaScript</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/respiratory-surveillance/"><img src="img/respiratory-surveillance.webp" width="1600" height="1000" loading="lazy" alt="Respiratory Surveillance dashboard with a US map of influenza activity by state"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/respiratory-surveillance/">Respiratory Surveillance</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/respiratory-surveillance/">Open</a><a href="https://github.com/subbarajubuddaraju/respiratory-surveillance">Code</a></span>
+        <p>Weekly flu and COVID-19 hospital admissions for every state, with outbreak alerts and four-week forecasts.</p>
+        <span class="stack">Python, DuckDB, SQL, LightGBM quantile models, GitHub Actions</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/readmission-risk-ml/"><img src="img/readmission-risk-ml.webp" width="1600" height="1000" loading="lazy" alt="Readmission risk model results with a capacity planner for a care team"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/readmission-risk-ml/">Readmission Risk Model</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/readmission-risk-ml/">Open</a><a href="https://github.com/subbarajubuddaraju/readmission-risk-ml">Code</a></span>
+        <p>Predicts which diabetic patients will be back in hospital within 30 days, so a care team calls the right people first.</p>
+        <span class="stack">PySpark, MySQL, LightGBM, PyTorch, MLflow, FastAPI, Docker</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/climate-emissions-tracker/"><img src="img/climate-emissions-tracker.webp" width="1600" height="1000" loading="lazy" alt="Climate and Emissions Tracker with the global temperature anomaly since 1850"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/climate-emissions-tracker/">Climate and Emissions Tracker</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/climate-emissions-tracker/">Open</a><a href="https://github.com/subbarajubuddaraju/climate-emissions-tracker">Code</a></span>
+        <p>NOAA and NASA temperatures, Mauna Loa CO₂ and emissions for 218 countries in one warehouse, rebuilt weekly.</p>
+        <span class="stack">Python, DuckDB, SQL, data quality checks, GitHub Actions</span>
+      </figcaption>
+    </figure>
+
+    <figure class="project">
+      <a class="shot" href="https://subbarajubuddaraju.github.io/ecommerce-data-pipeline/"><img src="img/ecommerce-data-pipeline.webp" width="1600" height="1000" loading="lazy" alt="Storefront Analytics dashboard with monthly revenue by returning and new customers"></a>
+      <figcaption>
+        <h2><a href="https://subbarajubuddaraju.github.io/ecommerce-data-pipeline/">Storefront Analytics</a></h2>
+        <span class="links"><a href="https://subbarajubuddaraju.github.io/ecommerce-data-pipeline/">Open</a><a href="https://github.com/subbarajubuddaraju/ecommerce-data-pipeline">Code</a></span>
+        <p>Turns messy order exports into a star-schema warehouse that answers a shop owner's questions, with every rejected row audited.</p>
+        <span class="stack">Python, DuckDB, SQL, star schema, cohort and RFM analysis</span>
+      </figcaption>
+    </figure>
   </main>
 
-  <section class="tools" id="tools">
-    <h2>Tools, and where I used them</h2>
-    <p>Each one is in at least one project above, with code you can read.</p>
-    <dl><div><dt>Python</dt><dd>every project</dd></div><div><dt>SQL and DuckDB</dt><dd>hospital warehouse, surveillance, climate, e-commerce</dd></div><div><dt>dbt and Dagster</dt><dd>hospital warehouse</dd></div><div><dt>Kafka and Spark Streaming</dt><dd>subway line watch</dd></div><div><dt>PySpark and MySQL</dt><dd>readmission risk; Spark streaming for the subway</dd></div><div><dt>LightGBM</dt><dd>readmission risk, surveillance forecasts</dd></div><div><dt>PyTorch</dt><dd>readmission risk</dd></div><div><dt>scikit-learn</dt><dd>complaint routing</dd></div><div><dt>Transformers (DistilBERT)</dt><dd>complaint routing</dd></div><div><dt>Embeddings and hybrid search</dt><dd>drug labels</dd></div><div><dt>Open-source LLMs and evaluation</dt><dd>drug labels</dd></div><div><dt>MLflow, FastAPI, Docker</dt><dd>readmission risk</dd></div><div><dt>GitHub Actions</dt><dd>tests on every project; scheduled runs for subway, hospitals, surveillance, climate and gas prices</dd></div><div><dt>JavaScript</dt><dd>every live page; in-browser models for drug labels and complaints; Pitstop app</dd></div></dl>
-  </section>
-
-  <footer>Hosted on GitHub Pages. Every project's source is on <a href="https://github.com/subbarajubuddaraju">GitHub</a>, and the dashboards refresh from their own repositories.</footer>
+  <footer>
+    <span>V R S Subbaraju Buddaraju</span>
+    <span>Code for every project is on <a href="https://github.com/subbarajubuddaraju">GitHub</a>.</span>
+  </footer>
 </div>
-<script>
-const buttons = document.querySelectorAll(".filter button");
-const entries = document.querySelectorAll(".entry");
-document.querySelector(".filter").addEventListener("click", (e) => {
-  const b = e.target.closest("button");
-  if (!b) return;
-  buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-  entries.forEach((el) => { el.hidden = b.dataset.f !== "all" && !el.dataset.tags.split(" ").includes(b.dataset.f); });
-});
-</script>
 </body>
 </html>
