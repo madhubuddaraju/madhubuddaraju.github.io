@@ -1,4 +1,4 @@
-# madhubuddaraju.github.io
+# V R S Subbaraju Buddaraju
 
 Portfolio site linking to live dashboards for each project:
 
