@@ -2,7 +2,7 @@ name: Sync project dashboards
 
 # Each project repo rebuilds its dashboard (docs/index.html) on its own schedule.
 # This job copies the latest version of each into this site, so every dashboard is served at
-# madhubuddaraju.github.io/<project>/ and stays current.
+# subbarajubuddaraju.github.io/<project>/ and stays current.
 on:
   schedule:
     - cron: "41 */6 * * *"   # every 6 hours
@@ -21,21 +21,21 @@ jobs:
           set -euo pipefail
           for repo in respiratory-surveillance climate-emissions-tracker readmission-risk-ml ecommerce-data-pipeline consumer-complaints-nlp drug-label-rag hospital-quality-warehouse nyc-subway-live pitstop; do
             mkdir -p "$repo"
-            curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/$repo/main/docs/index.html" -o "$repo/index.html.new"
+            curl -fsSL --retry 3 "https://raw.githubusercontent.com/subbarajubuddaraju/$repo/main/docs/index.html" -o "$repo/index.html.new"
             # only accept a real page (guards against an empty or error response)
             if grep -q "</html>" "$repo/index.html.new"; then mv "$repo/index.html.new" "$repo/index.html"; else rm "$repo/index.html.new"; fi
           done
           # the hospital warehouse also publishes its dbt docs (lineage graph)
-          curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/hospital-quality-warehouse/main/docs/lineage.html" -o lineage.html.new
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/subbarajubuddaraju/hospital-quality-warehouse/main/docs/lineage.html" -o lineage.html.new
           if grep -q "</html>" lineage.html.new; then mv lineage.html.new hospital-quality-warehouse/lineage.html; else rm lineage.html.new; fi
           # Pitstop's page imports its logic module (its data files are read from the repo directly)
-          curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/pitstop/main/docs/core.js" -o core.js.new
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/subbarajubuddaraju/pitstop/main/docs/core.js" -o core.js.new
           if grep -q "export function" core.js.new; then mv core.js.new pitstop/core.js; else rm core.js.new; fi
           for f in icon.png icon-192.png icon-512.png favicon-32.png manifest.webmanifest; do
-            if curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/pitstop/main/docs/$f" -o "$f.new" && [ -s "$f.new" ]; then mv "$f.new" "pitstop/$f"; else rm -f "$f.new"; fi
+            if curl -fsSL --retry 3 "https://raw.githubusercontent.com/subbarajubuddaraju/pitstop/main/docs/$f" -o "$f.new" && [ -s "$f.new" ]; then mv "$f.new" "pitstop/$f"; else rm -f "$f.new"; fi
           done
           # the drug label search also needs its browser index
-          curl -fsSL --retry 3 "https://raw.githubusercontent.com/madhubuddaraju/drug-label-rag/main/docs/corpus.json" -o corpus.json.new
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/subbarajubuddaraju/drug-label-rag/main/docs/corpus.json" -o corpus.json.new
           if python3 -c "import json; json.load(open('corpus.json.new'))"; then mv corpus.json.new drug-label-rag/corpus.json; else rm corpus.json.new; fi
       - name: Commit if anything changed
         run: |
